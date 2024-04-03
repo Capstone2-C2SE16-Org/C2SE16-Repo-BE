@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('chats', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('student_id');
-            $table->foreign('student_id')->references('id')->on('students');
-            $table->unsignedBigInteger('teacher_id');
-            $table->foreign('teacher_id')->references('id')->on('teacher');
+            // $table->unsignedBigInteger('student_id');
+            // $table->foreign('student_id')->references('id')->on('students');
+            // $table->unsignedBigInteger('teacher_id');
+            // $table->foreign('teacher_id')->references('id')->on('teacher');
             $table->text('content');
             $table->dateTime('timestamp', $precision = 0);
         });
