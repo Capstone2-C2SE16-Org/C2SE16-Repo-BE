@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateAccountRolesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ return new class extends Migration
     {
         Schema::create('account_roles', function (Blueprint $table) {
             $table->unsignedBigInteger('role_id');
-            $table->foreign('role_id')->references('id')->on('roles');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             
             $table->unsignedBigInteger('account_id');
-            $table->foreign('account_id')->references('id')->on('accounts');
+            $table->foreign('account_id')->references('id')->on('accounts')->onDelete('cascade');
+            
+            // Đảm bảo rằng mỗi cặp role_id và account_id là duy nhất
+            $table->unique(['role_id', 'account_id']);
         });
     }
 
@@ -27,4 +30,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('account_roles');
     }
-};
+}
