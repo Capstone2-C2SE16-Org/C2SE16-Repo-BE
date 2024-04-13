@@ -22,5 +22,14 @@ class ClassroomManagerSeeder extends Seeder
             'manager_id' => '2',
             'classroom_id' => '2',
         ]);
+
+        ClassroomManager::create([
+            'manager_id' => '3',
+            'classroom_id' => '3',
+        ]);
+        ClassroomManager::create([
+            'manager_id' => '4',
+            'classroom_id' => '4',
+        ]);
     }
 }

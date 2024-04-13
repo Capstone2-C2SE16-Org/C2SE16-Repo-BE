@@ -14,13 +14,10 @@ class ClassroomSeeder extends Seeder
     public function run(): void
     {
         Classroom::create([
-            'name' => 'Lop nho',
             'classroom_type_id' => '1',
+            'learning_schedule_id' => '1',
+            'name' => 'lịch học lớp lớn 1',
         ]);
 
-        Classroom::create([
-            'name' => 'Lop lon',
-            'classroom_type_id' => '2',
-        ]);
     }
 }

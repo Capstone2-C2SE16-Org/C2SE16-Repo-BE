@@ -5,6 +5,12 @@ namespace Database\Seeders;
 use App\Models\Student;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+// use Database\Factories\StudentFactory;
+use App\Models\Classroom;
+use Illuminate\Support\Arr;
 
 class StudentSeeder extends Seeder
 {
@@ -13,110 +19,29 @@ class StudentSeeder extends Seeder
      */
     public function run(): void
     {
-        Student::create([
-                'name' => 'Be Hai',
-                'address' => 'Da Nang',
-                'day_of_birth'=>'2020-1-1',
-                'email' => 'haiday@gmail.com',
-                'gender' => '1',
-                'profile_image' => 'string',
-                'phone_number' => '123456789',
-                'username' => 'behai1',
-                'password' => 'behai1',
-                'classroom_id' => '1'
+        $classroomIds = Classroom::all()->pluck('id');
+        $classroom_id = $classroomIds->random();
+
+        $uniqueEmails = collect([]);
+
+        Student::factory()->count(5)->create([
+            'name' => Str::random(10),
+            'address' => Str::random(10),
+            'day_of_birth' => date('Y-m-d', strtotime('-' . rand(18, 65) . ' years')),
+            'email' => function () use ($uniqueEmails) {
+                $email = Str::random(10) . '@example.com';
+                while ($uniqueEmails->contains($email)) {
+                    $email = Str::random(10) . '@example.com';
+                }
+                $uniqueEmails->push($email);
+                return $email;
+            },
+            'gender' => rand(0, 1),
+            'profile_image' => null,
+            'phone_number' => '123-456-' . rand(1000, 9999),
+            'username' => Str::random(10),
+            'password' => Hash::make('password'),
+            'classroom_id' => $classroom_id,
         ]);
-
-        Student::create([
-            'name' => 'Be Ba',
-            'address' => 'Da Nang',
-            'day_of_birth'=>'2020-1-1',
-            'email' => 'baday@gmail.com',
-            'gender' => '0',
-            'profile_image' => 'string',
-            'phone_number' => '123456789456456',
-            'username' => 'beba1',
-            'password' => 'beba1',
-            'classroom_id' => '1'
-        ]);
-
-        Student::create([
-            'name' => 'Be Bon',
-            'address' => 'Da Nang',
-            'day_of_birth'=>'2020-1-1',
-            'email' => 'bonday@gmail.com',
-            'gender' => '1',
-            'profile_image' => 'string',
-            'phone_number' => '123456789',
-            'username' => 'bebon1',
-            'password' => 'bebon1',
-            'classroom_id' => '1'
-        ]);
-
-        Student::create([
-            'name' => 'Be Nam',
-            'address' => 'Da Nang',
-            'day_of_birth'=>'2020-1-1',
-            'email' => 'namday@gmail.com',
-            'gender' => '1',
-            'profile_image' => 'string',
-            'phone_number' => '123456789',
-            'username' => 'benam5',
-            'password' => 'benam',
-            'classroom_id' => '2'
-        ]);
-
-        Student::create([
-            'name' => 'Be Sau',
-            'address' => 'Da Nang',
-            'day_of_birth'=>'2020-1-1',
-            'email' => 'sauday@gmail.com',
-            'gender' => '0',
-            'profile_image' => 'string',
-            'phone_number' => '12666663456789',
-            'username' => 'besau6',
-            'password' => 'besau6',
-            'classroom_id' => '2'
-        ]);
-
-        Student::create([
-            'name' => 'Be Hai',
-            'address' => 'Da Nang',
-            'day_of_birth'=>'2020-1-1',
-            'email' => 'haiday@gmail.com',
-            'gender' => '1',
-            'profile_image' => 'string',
-            'phone_number' => '123456789',
-            'username' => 'behai1',
-            'password' => 'behai1',
-            'classroom_id' => '1'
-        ]);
-
-        Student::create([
-            'name' => 'Be Hai',
-            'address' => 'Da Nang',
-            'day_of_birth'=>'2020-1-1',
-            'email' => 'haiday@gmail.com',
-            'gender' => '1',
-            'profile_image' => 'string',
-            'phone_number' => '123456789',
-            'username' => 'behai1',
-            'password' => 'behai1',
-            'classroom_id' => '1'
-        ]);
-
-        Student::create([
-            'name' => 'Be Hai',
-            'address' => 'Da Nang',
-            'day_of_birth'=>'2020-1-1',
-            'email' => 'haiday@gmail.com',
-            'gender' => '1',
-            'profile_image' => 'string',
-            'phone_number' => '123456789',
-            'username' => 'behai1',
-            'password' => 'behai1',
-            'classroom_id' => '1'
-        ]);
-
-
     }
 }
