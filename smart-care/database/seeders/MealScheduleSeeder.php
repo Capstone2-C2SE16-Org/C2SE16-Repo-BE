@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\MealSchedule;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Faker\Factory as Faker;
 
 class MealScheduleSeeder extends Seeder
 {
@@ -13,25 +15,29 @@ class MealScheduleSeeder extends Seeder
      */
     public function run(): void
     {
-        MealSchedule::create([
-            'date' => '2024-5-5',
-            'morning' => 'Sua tuoi Vinamilk',
-            'noon' => 'Súp bò, bánh mỳ, Salad',
-            'afternoon' => 'Sữa chua Hy Lạp',
-        ]);
+        $faker = Faker::create();
 
-        MealSchedule::create([
-            'date' => '2024-5-6',
-            'morning' => 'Ngũ cốc',
-            'noon' => 'Cháo dinh dưỡng, Dưa lưới, Salad',
-            'afternoon' => 'Nước cam ép',
-        ]);
+        // Generate meal schedules for 30 days
+        for ($i = 0; $i < 30; $i++) {
+            $date = now()->addDays($i)->toDateString();
+            
+            DB::table('meal_schedules')->insert([
+                'date' => $date,
+                'morning' => $faker->sentence(),
+                'noon' => $faker->sentence(),
+                'afternoon' => $faker->sentence(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
 
-        MealSchedule::create([
-            'date' => '2024-5-7',
-            'morning' => 'Sữa tươi',
-            'noon' => 'Cơm dương châu, Nho Mỹ, Salad cá ngừ',
-            'afternoon' => 'Nước ép ổi',
-        ]);
+
+
+        // MealSchedule::create([
+        //     'date' => '2024-5-5',
+        //     'morning' => 'Sua tuoi Vinamilk',
+        //     'noon' => 'Súp bò, bánh mỳ, Salad',
+        //     'afternoon' => 'Sữa chua Hy Lạp',
+        // ]);
     }
 }
