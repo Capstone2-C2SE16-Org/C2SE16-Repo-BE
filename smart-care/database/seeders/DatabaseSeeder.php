@@ -22,12 +22,11 @@ class DatabaseSeeder extends Seeder
             ClassroomSeeder::class,
             StudentSeeder::class,
             ParentSeeder::class,
-            //ClassroomLearningScheduleSeeder::class,
             ClassroomManagerSeeder::class,
             CameraSeeder::class,
             StudentRequestSeeder::class,
             ContactBookSeeder::class,
-            ContactBookManageSeeder::class,
+            ContactBookManagerSeeder::class,
 
             FeesSeeder::class,
             TuitionSeeder::class,

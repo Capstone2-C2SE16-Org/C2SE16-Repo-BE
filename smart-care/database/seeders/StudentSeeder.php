@@ -24,7 +24,7 @@ class StudentSeeder extends Seeder
 
         $uniqueEmails = collect([]);
 
-        Student::factory()->count(5)->create([
+        Student::factory()->count(10)->create([
             'name' => Str::random(10),
             'address' => Str::random(10),
             'day_of_birth' => date('Y-m-d', strtotime('-' . rand(18, 65) . ' years')),

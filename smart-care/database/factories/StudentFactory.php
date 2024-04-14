@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Classroom;
-
+use Illuminate\Support\Facades\DB;
+use Faker\Factory as Faker;
 
 
 /**
