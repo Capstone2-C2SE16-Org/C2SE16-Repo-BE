@@ -13,7 +13,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class Manager extends Authenticatable
 {
-    //use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
