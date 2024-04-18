@@ -38,7 +38,7 @@ class ManagerSeeder extends Seeder
             'name' => 'Admin',
             'address' => 'Da Nang',
             'day_of_birth' => '2000-01-01',
-            'email' => 'admin@gmail.com',
+            'email' => 'capstone2c2se16@gmail.com',
             'email_verified_at' => now(),
             'gender' => '1',
             'profile_image' => 'img',
