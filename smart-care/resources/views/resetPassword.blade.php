@@ -40,9 +40,10 @@
                 </div>
             @endif
 
-            <form method="POST" class="needs-validation" novalidate>
+            <form method="POST" action="{{ route('password.update') }}" class="needs-validation" novalidate>
                 @csrf
-                <input type="hidden" name="id" value="{{ $manager[0]['id'] }}">
+                <input type="hidden" name="token" value="{{ request()->query('token') }}">
+                <input type="hidden" name="email" value="{{ request()->query('email') }}">
 
                 <div class="mb-3">
                     <input type="password" class="form-control" name="password" placeholder="Mật khẩu mới" required>

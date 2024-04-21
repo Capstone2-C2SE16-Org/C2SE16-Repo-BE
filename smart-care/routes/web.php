@@ -19,4 +19,4 @@ Route::get('/', function () {
 });
 
 Route::get('/reset-password', [AuthController::class, 'resetPasswordLoad']);
-Route::post('/reset-password', [AuthController::class, 'resetPassword']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');

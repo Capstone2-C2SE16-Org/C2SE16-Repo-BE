@@ -6,7 +6,6 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Manager;
 use Illuminate\Support\Str;
-//use Database\Factories\ManagerFactory;
 use Faker\Factory as Faker;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -41,11 +40,11 @@ class ManagerSeeder extends Seeder
             'email' => 'capstone2c2se16@gmail.com',
             'email_verified_at' => now(),
             'gender' => '1',
-            'profile_image' => 'img',
+            'profile_image' => 'https://png.pngtree.com/png-vector/20220810/ourlarge/pngtree-client-icon-manager-avatar-chief-vector-png-image_19468048.jpg',
             'phone_number' => '0905123434',
             'username' => 'admin',
-            'password' => Hash::make('password'), // You can set your desired default password here
-            'is_enable' => 1, // 90% chance of being true
+            'password' => Hash::make('password'), 
+            'is_enable' => 1, 
             'remember_token' => Str::random(10),
         ]);
 
@@ -70,22 +69,24 @@ class ManagerSeeder extends Seeder
             $manager_view,
         ]);
 
-
-        $faker = Faker::create();
+        $faker = Faker::create('vi_VN');
 
         foreach (range(1, 10) as $index) {
+            $name = $faker->name; 
+            $asciiName = $this->removeAccents($name);
+
             $manager = Manager::create([
-                'name' => $faker->name,
+                'name' => $name,
                 'address' => $faker->address,
-                'day_of_birth' => $faker->date,
-                'email' => $faker->unique()->safeEmail,
+                'day_of_birth' => $faker->dateTimeBetween('-50 years', '-18 years')->format('Y-m-d'),
+                'email' => strtolower(str_replace(' ', '', $asciiName)) . '@gmail.com',
                 'email_verified_at' => now(),
                 'gender' => rand(0, 1),
-                'profile_image' => $faker->imageUrl(),
+                'profile_image' => "https://picsum.photos/200/200?random=" . mt_rand(1000, 9999),
                 'phone_number' => $faker->phoneNumber,
-                'username' => $faker->userName,
-                'password' => Hash::make('password'), // You can set your desired default password here
-                'is_enable' => $faker->boolean(90), // 90% chance of being true
+                'username' => strtolower(str_replace(' ', '', $asciiName)),
+                'password' => Hash::make('password'),
+                'is_enable' => true,
                 'remember_token' => Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -98,5 +99,10 @@ class ManagerSeeder extends Seeder
                 $manager_view,
             ]);
         }
+    }
+
+    private function removeAccents($string)
+    {
+        return Str::slug($string, '');
     }
 }

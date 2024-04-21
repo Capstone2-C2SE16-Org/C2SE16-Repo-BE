@@ -3,14 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\Student;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-// use Database\Factories\StudentFactory;
 use App\Models\Classroom;
-use Illuminate\Support\Arr;
+use Faker\Factory as Faker;
 
 class StudentSeeder extends Seeder
 {
@@ -19,29 +16,35 @@ class StudentSeeder extends Seeder
      */
     public function run(): void
     {
+        $faker = Faker::create('vi_VN');
         $classroomIds = Classroom::all()->pluck('id');
-        $classroom_id = $classroomIds->random();
 
-        $uniqueEmails = collect([]);
+        for ($i = 0; $i < 10; $i++) {
+            $firstName = $faker->firstName;
+            $lastName = $faker->lastName;
+            $fullName = "$firstName $lastName";
 
-        Student::factory()->count(10)->create([
-            'name' => Str::random(10),
-            'address' => Str::random(10),
-            'day_of_birth' => date('Y-m-d', strtotime('-' . rand(18, 65) . ' years')),
-            'email' => function () use ($uniqueEmails) {
-                $email = Str::random(10) . '@example.com';
-                while ($uniqueEmails->contains($email)) {
-                    $email = Str::random(10) . '@example.com';
-                }
-                $uniqueEmails->push($email);
-                return $email;
-            },
-            'gender' => rand(0, 1),
-            'profile_image' => null,
-            'phone_number' => '123-456-' . rand(1000, 9999),
-            'username' => Str::random(10),
-            'password' => Hash::make('password'),
-            'classroom_id' => $classroom_id,
-        ]);
+            $asciiFirstName = Str::slug($firstName, '');
+            $asciiLastName = Str::slug($lastName, '');
+            $email = strtolower($asciiFirstName . $asciiLastName) . '@gmail.com';
+            $username = strtolower($asciiFirstName . $asciiLastName);
+            $dob = $faker->dateTimeBetween('-6 years', '-3 years')->format('Y-m-d');
+
+            $avatarUrl = "https://picsum.photos/200/200?random=" . mt_rand(1000, 9999);
+
+            Student::create([
+                'name' => $fullName,
+                'address' => $faker->address,
+                'day_of_birth' => $dob,
+                'email' => $email,
+                'gender' => $faker->boolean,
+                'profile_image' => $avatarUrl,
+                'phone_number' => $faker->phoneNumber,
+                'username' => $username,
+                'password' => Hash::make('password'),
+                'classroom_id' => $classroomIds->random(),
+                'is_enable' => true,
+            ]);
+        }
     }
 }
