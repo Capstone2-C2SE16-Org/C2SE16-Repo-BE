@@ -28,7 +28,7 @@ class StudentFactory extends Factory
         return [
             'name' => Str::random(10),
             'address' => Str::random(10),
-            'day_of_birth'=>date('Y-m-d', strtotime('-' . rand(18, 65) . ' years')),
+            'date_of_birth'=>date('Y-m-d', strtotime('-' . rand(18, 65) . ' years')),
             'email' => Str::random(20) . '@example.com',
             'gender' => rand(0, 1),
             'profile_image' => null,

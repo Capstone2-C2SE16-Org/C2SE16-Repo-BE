@@ -27,7 +27,7 @@ class ManagerSeeder extends Seeder
             DB::table('managers')->insert([
                 'name' => $faker->name,
                 'address' => $faker->address,
-                'day_of_birth' => $faker->date,
+                'date_of_birth' => $faker->date,
                 'email' => $faker->unique()->safeEmail,
                 'email_verified_at' => now(),
                 'gender' => rand(0, 1),
@@ -52,7 +52,7 @@ class ManagerSeeder extends Seeder
         // Manager::create()->count(15)->create([
         //     'name' => Str::random(10),
         //     'address' => Str::random(10),
-        //     'day_of_birth' => date('Y-m-d', strtotime('-' . rand(18, 65) . ' years')),
+        //     'date_of_birth' => date('Y-m-d', strtotime('-' . rand(18, 65) . ' years')),
         //     'email' => function () use ($uniqueEmails) {
         //         $email = Str::random(10) . '@example.com';
         //         while ($uniqueEmails->contains($email)) {
@@ -71,7 +71,7 @@ class ManagerSeeder extends Seeder
         // Manager::create([
         //     'name' => 'Đỗ Tiến Thành',
         //     'address' => 'Đà Nẵng',
-        //     'day_of_birth'=>'2001-1-1',
+        //     'date_of_birth'=>'2001-1-1',
         //     'email' => 'thanhday@gmail.com',
         //     'gender' => '1',
         //     'profile_image' => 'string',
@@ -83,7 +83,7 @@ class ManagerSeeder extends Seeder
         // Manager::create([
         //     'name' => 'Võ Văn Hảo',
         //     'address' => 'Quảng Nam',
-        //     'day_of_birth'=>'2002-03-20',
+        //     'date_of_birth'=>'2002-03-20',
         //     'email' => 'haovo@gmail.com',
         //     'gender' => '1',
         //     'profile_image' => 'string',
@@ -95,7 +95,7 @@ class ManagerSeeder extends Seeder
         // Manager::create([
         //     'name' => 'Nguyễn Cửu Hoàng Hải',
         //     'address' => 'Huế',
-        //     'day_of_birth'=>'2002-1-17',
+        //     'date_of_birth'=>'2002-1-17',
         //     'email' => 'hai@gmail.com',
         //     'gender' => '1',
         //     'profile_image' => 'string',
@@ -108,7 +108,7 @@ class ManagerSeeder extends Seeder
         // Manager::create([
         //     'name' => 'Nguyễn Như Ngọc',
         //     'address' => 'Hà Tĩnh',
-        //     'day_of_birth'=>'2002-1-10',
+        //     'date_of_birth'=>'2002-1-10',
         //     'email' => 'ngoc@gmail.com',
         //     'gender' => '0',
         //     'profile_image' => 'string',
@@ -121,7 +121,7 @@ class ManagerSeeder extends Seeder
         // Manager::create([
         //     'name' => 'Nguyễn Thị Lan',
         //     'address' => 'Bình Định',
-        //     'day_of_birth'=>'2007-1-10',
+        //     'date_of_birth'=>'2007-1-10',
         //     'email' => 'aaaaaa@gmail.com',
         //     'gender' => '0',
         //     'profile_image' => 'string',

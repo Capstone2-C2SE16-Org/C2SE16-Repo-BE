@@ -12,6 +12,11 @@ class Classroom extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'classroom_type_id',
+        'learning_schedule_id',
+    ];
     public function classroom_type(): BelongsTo
     {
         return $this->belongsTo(ClassroomType::class);

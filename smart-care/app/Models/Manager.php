@@ -13,7 +13,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class Manager extends Authenticatable
 {
-    //use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -23,7 +23,7 @@ class Manager extends Authenticatable
     protected $fillable = [
         'name',
         'address',
-        'day_of_birth',
+        'date_of_birth',
         'email',
         'gender',
         'profile_image',

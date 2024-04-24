@@ -27,7 +27,7 @@ class StudentSeeder extends Seeder
         Student::factory()->count(10)->create([
             'name' => Str::random(10),
             'address' => Str::random(10),
-            'day_of_birth' => date('Y-m-d', strtotime('-' . rand(18, 65) . ' years')),
+            'date_of_birth' => date('Y-m-d', strtotime('-' . rand(18, 65) . ' years')),
             'email' => function () use ($uniqueEmails) {
                 $email = Str::random(10) . '@example.com';
                 while ($uniqueEmails->contains($email)) {
