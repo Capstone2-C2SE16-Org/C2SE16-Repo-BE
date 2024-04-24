@@ -2,42 +2,69 @@
 
 namespace Database\Seeders;
 
-use App\Models\MealSchedule;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-use Faker\Factory as Faker;
 
 class MealScheduleSeeder extends Seeder
 {
+
+    protected $grains = ['Bánh mì nguyên cám', 'Bún', 'Phở', 'Bánh mỳ'];
+    protected $proteins = ['Thịt gà', 'Cá hồi', 'Trứng', 'Sữa đậu nành'];
+    protected $dairy = ['Sữa tươi', 'Sữa chua', 'Phô mai'];
+    protected $fruits = ['Chuối', 'Táo', 'Cam', 'Dưa hấu'];
+    protected $vegetables = ['Rau cải', 'Cà rốt', 'Cà chua', 'Dưa chuột'];
+
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $faker = Faker::create();
+        $startOfWeek = Carbon::now()->startOfWeek();
+        $mealsForTheWeek = $this->generateWeeklyMealPlan();
 
-        // Generate meal schedules for 30 days
-        for ($i = 0; $i < 30; $i++) {
-            $date = now()->addDays($i)->toDateString();
-            
+        for ($day = 0; $day < 6; $day++) {
+            $date = $startOfWeek->copy()->addDays($day);
+
+            if ($date->dayOfWeek == Carbon::SUNDAY) {
+                $startOfWeek->addWeek();
+                $day = -1;
+                continue;
+            }
+
+            $meals = $mealsForTheWeek[$day];
+
             DB::table('meal_schedules')->insert([
-                'date' => $date,
-                'morning' => $faker->sentence(),
-                'noon' => $faker->sentence(),
-                'afternoon' => $faker->sentence(),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'date' => $date->toDateString(),
+                'morning' => $meals['morning'], 
+                'noon' => $meals['noon'],
+                'afternoon' => $meals['afternoon'],
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ]);
         }
+    }
 
-
-
-        // MealSchedule::create([
-        //     'date' => '2024-5-5',
-        //     'morning' => 'Sua tuoi Vinamilk',
-        //     'noon' => 'Súp bò, bánh mỳ, Salad',
-        //     'afternoon' => 'Sữa chua Hy Lạp',
-        // ]);
+    private function generateWeeklyMealPlan(): array
+    {
+        $weeklyMealPlan = [];
+        for ($i = 0; $i < 6; $i++) {
+            $weeklyMealPlan[] = [
+                'morning' => $this->randomMeal(['grains', 'dairy']),
+                'noon' => $this->randomMeal(['proteins', 'vegetables', 'grains']),
+                'afternoon' => $this->randomMeal(['fruits'])
+            ];
+        }
+        return $weeklyMealPlan;
+    }
+    
+    private function randomMeal(array $groups): string
+    {
+        $meal = [];
+        foreach ($groups as $group) {
+            $item = $this->{"{$group}"}[array_rand($this->{"{$group}"})];
+            $meal[] = $item;
+        }
+        return implode(', ', $meal);
     }
 }

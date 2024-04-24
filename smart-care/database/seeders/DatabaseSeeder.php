@@ -4,9 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -18,8 +16,8 @@ class DatabaseSeeder extends Seeder
             ManagerSeeder::class,
             AnnouncementSeeder::class,
             ClassroomTypeSeeder::class,
-            LearningScheduleSeeder::class,
             ClassroomSeeder::class,
+            LearningScheduleSeeder::class,
             StudentSeeder::class,
             ParentSeeder::class,
             ClassroomManagerSeeder::class,
@@ -27,7 +25,6 @@ class DatabaseSeeder extends Seeder
             StudentRequestSeeder::class,
             ContactBookSeeder::class,
             ContactBookManagerSeeder::class,
-
             FeesSeeder::class,
             TuitionSeeder::class,
             PaymentSeeder::class,

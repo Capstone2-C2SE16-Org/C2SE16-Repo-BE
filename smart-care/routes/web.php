@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
 /*
@@ -17,8 +18,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Auth::routes();
-
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::resource('students', StudentController::class);
+Route::get('/reset-password', [AuthController::class, 'resetPasswordLoad']);
+Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');

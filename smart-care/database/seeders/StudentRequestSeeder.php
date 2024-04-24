@@ -16,21 +16,39 @@ class StudentRequestSeeder extends Seeder
      */
     public function run(): void
     {
-        $faker = Faker::create();
+        $faker = Faker::create('vi_VN');
 
-        // Get all student and manager IDs
         $studentIds = Student::all()->pluck('id');
         $managerIds = Manager::all()->pluck('id');
 
-        // Generate student requests
+        $fixedReturnDate = now()->addWeeks(2)->format('Y-m-d');
+
         foreach (range(1, 20) as $index) {
             $student_id = $studentIds->random();
             $manager_id = $managerIds->random();
 
+            $reasons = ['sốt', 'ho', 'đau bụng', 'nôn/buồn nôn', 'đau mắt', 'có việc gia đình'];
+            $otherReasons = [
+                'Gia đình có việc cần giải quyết gấp',
+                'Có lịch hẹn với bác sĩ',
+                'Đi thăm họ hàng ở xa',
+            ];
+
+            if ($faker->boolean()) { 
+                $selectedReason = $faker->randomElement($reasons);
+                $otherReason = null;
+            } else { 
+                $selectedReason = null;
+                $otherReason = $faker->randomElement($otherReasons);
+            }
+
             DB::table('student_requests')->insert([
-                'content' => $faker->paragraph,
-                'status' => $faker->boolean(50), // 50% chance of being true
-                'request_date' => $faker->dateTime(),
+                'reason' => $selectedReason,
+                'other_reason' => $otherReason,
+                'leave_date' => $faker->dateTimeThisYear()->format('Y-m-d'),
+                'return_date' => $fixedReturnDate,
+                'status' => $faker->boolean(50),
+                'request_date' => $faker->dateTimeThisYear(),
                 'student_id' => $student_id,
                 'manager_id' => $manager_id,
                 'created_at' => now(),
