@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('student_requests', function (Blueprint $table) {
             $table->id();
-            $table->text('content');
+            $table->text('reason')->nullable();
+            $table->text('other_reason')->nullable();
+            $table->date('leave_date');
+            $table->date('return_date')->nullable();
             $table->boolean('status')->default(0);
-            $table->dateTime('request_date', $precision = 0);
+            $table->timestamp('request_date')->default(now());
             $table->unsignedBigInteger('student_id');
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
             $table->unsignedBigInteger('manager_id');

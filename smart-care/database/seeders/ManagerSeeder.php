@@ -24,13 +24,24 @@ class ManagerSeeder extends Seeder
         $manager_update = Permission::create(['name' => 'managers.update']);
         $manager_delete = Permission::create(['name' => 'managers.delete']);
 
+        $meal_schedule_view = Permission::create(['name' => 'meal_schedules.view']);
+
+        $student_request_create = Permission::create(['name' => 'student_requests.create']);
+        $student_request_view = Permission::create(['name' => 'student_requests.view']);
+        $student_request_update = Permission::create(['name' => 'student_requests.update']);
+        $student_request_delete = Permission::create(['name' => 'student_requests.delete']);
+
         $admin_role = Role::create(['name' => 'admin']);
         $admin_role->givePermissionTo([
             $manager_create,
             $manager_list,
             $manager_update,
             $manager_view,
-            $manager_delete
+            $manager_delete,
+            $meal_schedule_view,
+            $student_request_view,
+            $student_request_update,
+            $student_request_delete,
         ]);
 
         $admin = Manager::create([
@@ -43,8 +54,8 @@ class ManagerSeeder extends Seeder
             'profile_image' => 'https://png.pngtree.com/png-vector/20220810/ourlarge/pngtree-client-icon-manager-avatar-chief-vector-png-image_19468048.jpg',
             'phone_number' => '0905123434',
             'username' => 'admin',
-            'password' => Hash::make('password'), 
-            'is_enable' => 1, 
+            'password' => Hash::make('password'),
+            'is_enable' => 1,
             'remember_token' => Str::random(10),
         ]);
 
@@ -54,25 +65,33 @@ class ManagerSeeder extends Seeder
             $manager_list,
             $manager_update,
             $manager_view,
-            $manager_delete
+            $manager_delete,
+            $meal_schedule_view,
+            $student_request_view,
+            $student_request_update,
+            $student_request_delete,
         ]);
 
         $teacher_role = Role::create(['name' => 'teacher']);
         $teacher_role->givePermissionTo([
             $manager_list,
             $manager_view,
+            $meal_schedule_view,
+            $student_request_view,
+            $student_request_update,
         ]);
 
         $coordinator_role = Role::create(['name' => 'coordinator']);
         $coordinator_role->givePermissionTo([
             $manager_list,
             $manager_view,
+            $meal_schedule_view,
         ]);
 
         $faker = Faker::create('vi_VN');
 
         foreach (range(1, 10) as $index) {
-            $name = $faker->name; 
+            $name = $faker->name;
             $asciiName = $this->removeAccents($name);
 
             $manager = Manager::create([
@@ -94,10 +113,22 @@ class ManagerSeeder extends Seeder
 
             $assignedRole = $faker->randomElement([$teacher_role, $coordinator_role]);
             $manager->assignRole($assignedRole);
-            $manager->givePermissionTo([
-                $manager_list,
-                $manager_view,
-            ]);
+
+            if ($assignedRole->name === 'teacher') {
+                $manager->givePermissionTo([
+                    $manager_list,
+                    $manager_view,
+                    $meal_schedule_view,
+                    $student_request_view,
+                    $student_request_update,
+                ]);
+            } else if ($assignedRole->name === 'coordinator') {
+                $manager->givePermissionTo([
+                    $manager_list,
+                    $manager_view,
+                    $meal_schedule_view,
+                ]);
+            }
         }
     }
 

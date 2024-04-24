@@ -14,6 +14,8 @@ class Student extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $table = 'students';
+
     protected $fillable = [
         'name',
         'address',
