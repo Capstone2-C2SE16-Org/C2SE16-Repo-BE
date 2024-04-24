@@ -12,11 +12,33 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        $this->call([
+            ManagerSeeder::class,
+            AnnouncementSeeder::class,
+            ClassroomTypeSeeder::class,
+            ClassroomSeeder::class,
+            LearningScheduleSeeder::class,
+            StudentSeeder::class,
+            ParentSeeder::class,
+            ClassroomManagerSeeder::class,
+            CameraSeeder::class,
+            StudentRequestSeeder::class,
+            ContactBookSeeder::class,
+            ContactBookManagerSeeder::class,
+            FeesSeeder::class,
+            TuitionSeeder::class,
+            PaymentSeeder::class,
+            MealScheduleSeeder::class,
+            ManagerRoleSeeder::class,
+        ]);
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
+
+
+
+        // DB::table('Manager')->insert([
+        //     'name' => Str::random(10),
+        //     'email' => Str::random(10).'@example.com',
+        //     'password' => Hash::make('password'),
         // ]);
     }
 }

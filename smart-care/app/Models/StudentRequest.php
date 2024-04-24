@@ -10,6 +10,19 @@ class StudentRequest extends Model
 {
     use HasFactory;
 
+    protected $table = 'student_requests';
+
+    protected $fillable = [
+        'reason',  
+        'other_reason',   
+        'leave_date',       
+        'return_date',    
+        'status',         
+        'request_date',
+        'student_id',
+        'manager_id',
+    ];
+
     public function student(): BelongsTo
     {
         return $this->belongsTo(Student::class);
