@@ -31,6 +31,14 @@ class ManagerSeeder extends Seeder
         $student_request_update = Permission::create(['name' => 'student_requests.update']);
         $student_request_delete = Permission::create(['name' => 'student_requests.delete']);
 
+        $classroom_view = Permission::create(['name' => 'classrooms.view']);
+        $classroom_manage = Permission::create(['name' => 'classrooms.manage']);
+
+        $learning_schedule_view = Permission::create(['name' => 'learning_schedules.view']);
+        $learning_schedule_create = Permission::create(['name' => 'learning_schedules.create']);
+        $learning_schedule_update = Permission::create(['name' => 'learning_schedules.update']);
+        $learning_schedule_delete = Permission::create(['name' => 'learning_schedules.delete']);
+
         $admin_role = Role::create(['name' => 'admin']);
         $admin_role->givePermissionTo([
             $manager_create,
@@ -42,6 +50,12 @@ class ManagerSeeder extends Seeder
             $student_request_view,
             $student_request_update,
             $student_request_delete,
+            $classroom_view,
+            $classroom_manage,
+            $learning_schedule_view,
+            $learning_schedule_create,
+            $learning_schedule_update,
+            $learning_schedule_delete,
         ]);
 
         $admin = Manager::create([
@@ -70,6 +84,12 @@ class ManagerSeeder extends Seeder
             $student_request_view,
             $student_request_update,
             $student_request_delete,
+            $classroom_view,
+            $classroom_manage,
+            $learning_schedule_view,
+            $learning_schedule_create,
+            $learning_schedule_update,
+            $learning_schedule_delete,
         ]);
 
         $teacher_role = Role::create(['name' => 'teacher']);
@@ -79,6 +99,11 @@ class ManagerSeeder extends Seeder
             $meal_schedule_view,
             $student_request_view,
             $student_request_update,
+            $classroom_view,
+            $learning_schedule_view,
+            $learning_schedule_create,
+            $learning_schedule_update,
+            $learning_schedule_delete,
         ]);
 
         $coordinator_role = Role::create(['name' => 'coordinator']);
@@ -121,6 +146,11 @@ class ManagerSeeder extends Seeder
                     $meal_schedule_view,
                     $student_request_view,
                     $student_request_update,
+                    $classroom_view,
+                    $learning_schedule_view,
+                    $learning_schedule_create,
+                    $learning_schedule_update,
+                    $learning_schedule_delete,
                 ]);
             } else if ($assignedRole->name === 'coordinator') {
                 $manager->givePermissionTo([

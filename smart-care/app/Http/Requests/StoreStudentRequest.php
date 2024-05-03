@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class StoreStudentRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class StoreStudentRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return true;
+        return Auth::check();
     }
 
     /**
@@ -22,14 +23,11 @@ class StoreStudentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'reason' => 'required_without:other_reason|string|max:255',
-            'other_reason' => 'required_without:reason|string|max:255',
+            'reason' => 'required_without:other_reason|nullable|string|max:255',
+            'other_reason' => 'required_without:reason|nullable|string|max:255',
             'leave_date' => 'required|date',
             'return_date' => 'nullable|date|after_or_equal:leave_date',
-            'status' => 'required|boolean',
             'request_date' => 'required|date',
-            'student_id' => 'required|exists:students,id',
-            'manager_id' => 'required|exists:managers,id',
         ];
     }
 }

@@ -72,13 +72,18 @@ class Manager extends Authenticatable
         return $this->hasMany(ContactBookManager::class);
     }
 
-    public function classroom_managers(): HasMany
+    public function classrooms(): BelongsToMany
     {
-        return $this->hasMany(ClassroomManager::class);
+        return $this->belongsToMany(Classroom::class);
     }
 
     public function announcements(): HasMany
     {
         return $this->hasMany(Announcement::class);
+    }
+
+    public function isStudent()
+    {
+        return $this->roles->pluck('name')->contains('student');
     }
 }   

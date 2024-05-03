@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Mobile\ClassroomController;
+use App\Http\Controllers\Mobile\LearningScheduleController;
 use App\Http\Controllers\Mobile\MealScheduleController;
 use App\Http\Controllers\Mobile\StudentRequestController;
 use App\Http\Resources\ManagerResource;
@@ -37,5 +39,18 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{id}', [StudentRequestController::class, 'show'])->middleware('permission:student_requests.view');
         Route::put('/{id}', [StudentRequestController::class, 'update'])->middleware('permission:student_requests.update');
         Route::delete('/{id}', [StudentRequestController::class, 'destroy'])->middleware('permission:student_requests.delete');
+    });
+
+    Route::prefix('classrooms')->group(function () {
+        Route::get('/', [ClassroomController::class, 'index']);
+        Route::get('/{classroomId}', [ClassroomController::class, 'show']);
+        Route::post('/{classroomId}/assign-teacher', [ClassroomController::class, 'assignTeacher'])->middleware(['permission:classrooms.manage']);
+        Route::get('/{classroomId}/schedules', [ClassroomController::class, 'getClassroomSchedule']);
+        Route::get('/{classroomId}/details', [ClassroomController::class, 'getClassroom']);
+        Route::get('/{classroomId}/schedules/current', [ClassroomController::class, 'getCurrentWeek']);
+
+        Route::post('/{classroomId}/schedules', [LearningScheduleController::class, 'store'])->middleware(['permission:learning_schedules.create']);
+        Route::put('/{classroomId}/schedules/{id}', [LearningScheduleController::class, 'update'])->middleware('permission:learning_schedules.update');
+        Route::delete('/{classroomId}/schedules/{id}', [LearningScheduleController::class, 'destroy'])->middleware('permission:learning_schedules.delete');
     });
 });
