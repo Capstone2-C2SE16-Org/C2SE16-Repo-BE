@@ -20,3 +20,5 @@ Route::get('/', function () {
 
 Route::get('/reset-password', [AuthController::class, 'resetPasswordLoad']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+
+// Route::resource('students', StudentController::class);

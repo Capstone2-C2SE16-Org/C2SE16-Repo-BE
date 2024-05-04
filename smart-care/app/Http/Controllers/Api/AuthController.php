@@ -41,7 +41,7 @@ class AuthController extends Controller
                     'student_id' => $student->id,
                     'name' => $student->name,
                     'address' => $student->address,
-                    'day_of_birth' => $student->day_of_birth,
+                    'date_of_birth' => $student->date_of_birth,
                     'email' => $student->email,
                     'gender' => $student->gender,
                     'profile_image' => $student->profile_image,

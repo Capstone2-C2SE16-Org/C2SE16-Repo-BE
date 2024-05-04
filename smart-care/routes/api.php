@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Mobile\MealScheduleController;
-use App\Http\Controllers\Mobile\StudentRequestController;
+use App\Http\Controllers\Api\StudentRequestController;
 use App\Http\Resources\ManagerResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +24,8 @@ Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logo
 Route::post('forget-password', [AuthController::class, 'forgetPassword']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::apiResource('students', 'StudentController');
+    
     Route::get('/manager', function (Request $request) {
         return new ManagerResource($request->user());
     });
@@ -31,11 +33,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/meal-schedules/current', [MealScheduleController::class, 'getCurrentWeek']);
     Route::get('/meal-schedules/next', [MealScheduleController::class, 'getNextWeek']);
 
-    Route::prefix('student-requests')->group(function () {
-        Route::post('/', [StudentRequestController::class, 'store']);
-        Route::get('/', [StudentRequestController::class, 'index'])->middleware('permission:student_requests.view');
-        Route::get('/{id}', [StudentRequestController::class, 'show'])->middleware('permission:student_requests.view');
-        Route::put('/{id}', [StudentRequestController::class, 'update'])->middleware('permission:student_requests.update');
-        Route::delete('/{id}', [StudentRequestController::class, 'destroy'])->middleware('permission:student_requests.delete');
-    });
+    // Route::prefix('student-requests')->group(function () {
+    //     Route::post('/', [StudentRequestController::class, 'store']);
+    //     Route::get('/', [StudentRequestController::class, 'index'])->middleware('permission:student_requests.view');
+    //     Route::get('/{id}', [StudentRequestController::class, 'show'])->middleware('permission:student_requests.view');
+    //     Route::put('/{id}', [StudentRequestController::class, 'update'])->middleware('permission:student_requests.update');
+    //     Route::delete('/{id}', [StudentRequestController::class, 'destroy'])->middleware('permission:student_requests.delete');
+    // });
 });

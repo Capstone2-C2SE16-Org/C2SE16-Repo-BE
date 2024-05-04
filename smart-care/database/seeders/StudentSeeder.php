@@ -35,7 +35,7 @@ class StudentSeeder extends Seeder
             Student::create([
                 'name' => $fullName,
                 'address' => $faker->address,
-                'day_of_birth' => $dob,
+                'date_of_birth' => $dob,
                 'email' => $email,
                 'gender' => $faker->boolean,
                 'profile_image' => $avatarUrl,

@@ -41,21 +41,25 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Tên phụ huynh:</strong>
-                {{-- {{ $parents->name_parent }} --}}
-                {{ $student ->name_parent }}
+                {{ $student->parents->name }}
+                {{-- {{ $parent->name_parent }} --}}
+                {{-- {{ $student ->name_parent }} --}}
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Ngày sinh phụ huynh:</strong>
-                {{ $student->date_of_birth_parent }}
+                {{ $student->parents->date_of_birth }}
+                {{-- {{ $student->date_of_birth_parent }} --}}
+                {{-- {{ $parent->date_of_birth_parent }} --}}
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Giới tính phụ huynh:</strong>
-                {{-- {{ $parents->gender_parent }} --}}
-                {{ $student ->gender_parent }}
+                {{ $student->parents->gender }}
+                {{-- {{ $parent->gender_parent }} --}}
+                {{-- {{ $student ->gender_parent }} --}}
                 
             </div>
         </div>

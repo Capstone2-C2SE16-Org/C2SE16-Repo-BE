@@ -47,7 +47,7 @@ class ManagerSeeder extends Seeder
         $admin = Manager::create([
             'name' => 'Admin',
             'address' => 'Da Nang',
-            'day_of_birth' => '2000-01-01',
+            'date_of_birth' => '2000-01-01',
             'email' => 'capstone2c2se16@gmail.com',
             'email_verified_at' => now(),
             'gender' => '1',
@@ -97,7 +97,7 @@ class ManagerSeeder extends Seeder
             $manager = Manager::create([
                 'name' => $name,
                 'address' => $faker->address,
-                'day_of_birth' => $faker->dateTimeBetween('-50 years', '-18 years')->format('Y-m-d'),
+                'date_of_birth' => $faker->dateTimeBetween('-50 years', '-18 years')->format('Y-m-d'),
                 'email' => strtolower(str_replace(' ', '', $asciiName)) . '@gmail.com',
                 'email_verified_at' => now(),
                 'gender' => rand(0, 1),
