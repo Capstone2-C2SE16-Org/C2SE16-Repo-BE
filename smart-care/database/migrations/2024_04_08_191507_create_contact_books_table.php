@@ -16,7 +16,7 @@ return new class extends Migration
             $table->float('height', 8, 2);
             $table->float('weight', 8, 2);
             $table->string('blood_pressure');
-            $table->string('vesion_test');
+            $table->string('vision_test');
             $table->integer('total_absences');
             $table->float('transcript', 8, 2);
             $table->text('comment');

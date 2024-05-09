@@ -41,7 +41,7 @@ class LearningScheduleSeeder extends Seeder
                 ->whereBetween('date', [$startOfWeek, $startOfWeek->copy()->endOfWeek()])
                 ->delete();
 
-            for ($dayIndex = 0; $dayIndex < 6; $dayIndex++) {
+            for ($dayIndex = 0; $dayIndex < 5; $dayIndex++) {
                 $date = $startOfWeek->copy()->addDays($dayIndex);
 
                 $scheduleName = "Lịch học {$classroom->name}";

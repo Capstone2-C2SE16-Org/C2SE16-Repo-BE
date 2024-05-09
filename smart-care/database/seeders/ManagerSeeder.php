@@ -25,6 +25,9 @@ class ManagerSeeder extends Seeder
         $manager_delete = Permission::create(['name' => 'managers.delete']);
 
         $meal_schedule_view = Permission::create(['name' => 'meal_schedules.view']);
+        $meal_schedule_create = Permission::create(['name' => 'meal_schedules.create']);
+        $meal_schedule_update = Permission::create(['name' => 'meal_schedules.update']);
+        $meal_schedule_delete = Permission::create(['name' => 'meal_schedules.delete']);
 
         $student_request_create = Permission::create(['name' => 'student_requests.create']);
         $student_request_view = Permission::create(['name' => 'student_requests.view']);
@@ -39,6 +42,8 @@ class ManagerSeeder extends Seeder
         $learning_schedule_update = Permission::create(['name' => 'learning_schedules.update']);
         $learning_schedule_delete = Permission::create(['name' => 'learning_schedules.delete']);
 
+        $contact_book_view = Permission::create(['name' => 'contact_books.view']);
+
         $admin_role = Role::create(['name' => 'admin']);
         $admin_role->givePermissionTo([
             $manager_create,
@@ -47,6 +52,9 @@ class ManagerSeeder extends Seeder
             $manager_view,
             $manager_delete,
             $meal_schedule_view,
+            $meal_schedule_create,
+            $meal_schedule_update,
+            $meal_schedule_delete,
             $student_request_view,
             $student_request_update,
             $student_request_delete,
@@ -56,12 +64,13 @@ class ManagerSeeder extends Seeder
             $learning_schedule_create,
             $learning_schedule_update,
             $learning_schedule_delete,
+            $contact_book_view,
         ]);
 
         $admin = Manager::create([
             'name' => 'Admin',
             'address' => 'Da Nang',
-            'day_of_birth' => '2000-01-01',
+            'date_of_birth' => '2000-01-01',
             'email' => 'capstone2c2se16@gmail.com',
             'email_verified_at' => now(),
             'gender' => '1',
@@ -81,6 +90,9 @@ class ManagerSeeder extends Seeder
             $manager_view,
             $manager_delete,
             $meal_schedule_view,
+            $meal_schedule_create,
+            $meal_schedule_update,
+            $meal_schedule_delete,
             $student_request_view,
             $student_request_update,
             $student_request_delete,
@@ -90,13 +102,13 @@ class ManagerSeeder extends Seeder
             $learning_schedule_create,
             $learning_schedule_update,
             $learning_schedule_delete,
+            $contact_book_view,
         ]);
 
         $teacher_role = Role::create(['name' => 'teacher']);
         $teacher_role->givePermissionTo([
             $manager_list,
             $manager_view,
-            $meal_schedule_view,
             $student_request_view,
             $student_request_update,
             $classroom_view,
@@ -104,6 +116,7 @@ class ManagerSeeder extends Seeder
             $learning_schedule_create,
             $learning_schedule_update,
             $learning_schedule_delete,
+            $contact_book_view,
         ]);
 
         $coordinator_role = Role::create(['name' => 'coordinator']);
@@ -111,6 +124,9 @@ class ManagerSeeder extends Seeder
             $manager_list,
             $manager_view,
             $meal_schedule_view,
+            $meal_schedule_create,
+            $meal_schedule_update,
+            $meal_schedule_delete,
         ]);
 
         $faker = Faker::create('vi_VN');
@@ -122,7 +138,7 @@ class ManagerSeeder extends Seeder
             $manager = Manager::create([
                 'name' => $name,
                 'address' => $faker->address,
-                'day_of_birth' => $faker->dateTimeBetween('-50 years', '-18 years')->format('Y-m-d'),
+                'date_of_birth' => $faker->dateTimeBetween('-50 years', '-18 years')->format('Y-m-d'),
                 'email' => strtolower(str_replace(' ', '', $asciiName)) . '@gmail.com',
                 'email_verified_at' => now(),
                 'gender' => rand(0, 1),
@@ -143,7 +159,6 @@ class ManagerSeeder extends Seeder
                 $manager->givePermissionTo([
                     $manager_list,
                     $manager_view,
-                    $meal_schedule_view,
                     $student_request_view,
                     $student_request_update,
                     $classroom_view,
@@ -151,12 +166,16 @@ class ManagerSeeder extends Seeder
                     $learning_schedule_create,
                     $learning_schedule_update,
                     $learning_schedule_delete,
+                    $contact_book_view,
                 ]);
             } else if ($assignedRole->name === 'coordinator') {
                 $manager->givePermissionTo([
                     $manager_list,
                     $manager_view,
                     $meal_schedule_view,
+                    $meal_schedule_create,
+                    $meal_schedule_update,
+                    $meal_schedule_delete,
                 ]);
             }
         }

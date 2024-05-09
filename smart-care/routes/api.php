@@ -5,6 +5,7 @@ use App\Http\Controllers\Mobile\ClassroomController;
 use App\Http\Controllers\Mobile\LearningScheduleController;
 use App\Http\Controllers\Mobile\MealScheduleController;
 use App\Http\Controllers\Mobile\StudentRequestController;
+use App\Http\Controllers\Web\MealScheduleController as WebMealScheduleController;
 use App\Http\Resources\ManagerResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,8 +31,13 @@ Route::middleware('auth:sanctum')->group(function () {
         return new ManagerResource($request->user());
     });
 
-    Route::get('/meal-schedules/current', [MealScheduleController::class, 'getCurrentWeek']);
-    Route::get('/meal-schedules/next', [MealScheduleController::class, 'getNextWeek']);
+    Route::prefix('meal-schedules')->group(function () {
+        Route::get('/current', [MealScheduleController::class, 'getCurrentWeek']);
+        Route::get('/', [WebMealScheduleController::class, 'index'])->middleware('permission:meal_schedules.view');
+        Route::post('/', [WebMealScheduleController::class, 'store'])->middleware('permission:meal_schedules.create');
+        Route::put('/{id}', [WebMealScheduleController::class, 'update'])->middleware('permission:meal_schedules.update');
+        Route::delete('/{id}', [WebMealScheduleController::class, 'destroy'])->middleware('permission:meal_schedules.delete');
+    });
 
     Route::prefix('student-requests')->group(function () {
         Route::post('/', [StudentRequestController::class, 'store']);

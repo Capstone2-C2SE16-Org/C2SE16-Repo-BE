@@ -18,7 +18,7 @@ class ManagerResource extends JsonResource
             'manager_id' => $this->id,
             'name' => $this->name,
             'address' => $this->address,
-            'day_of_birth' => $this->day_of_birth,
+            'date_of_birth' => $this->date_of_birth,
             'email' => $this->email,
             'gender' => $this->gender,
             'profile_image' => $this->profile_image,

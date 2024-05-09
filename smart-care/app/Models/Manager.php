@@ -23,7 +23,7 @@ class Manager extends Authenticatable
     protected $fillable = [
         'name',
         'address',
-        'day_of_birth',
+        'date_of_birth',
         'email',
         'gender',
         'profile_image',
