@@ -51,43 +51,6 @@ class StudentController extends Controller
         return response()->json(['student' => $student, 'parent' => $parent], 201);
     }
 
-    // public function update(StudentRequest $request, $id)
-    // {
-    //     // Retrieve the student by id, or fail with a 404 error
-    //     $student = Student::findOrFail($id);
-
-    //     // Update the student using the validated data from the request
-    //     $student->update($request->validated());
-
-    //     // Optionally, update parent information if provided
-    //     if ($request->has('parent_name')) {
-    //         $parent = $student->parent;
-    //         $parent->update([
-    //             'name' => $request->parent_name,
-    //             'date_of_birth' => $request->parent_date_of_birth,
-    //             'gender' => $request->parent_gender
-    //         ]);
-    //     }
-
-    //     // Return the updated student data
-    //     return response()->json(['student' => $student, 'parent' => $student->parent], 200);
-    // }
-    // public function update(StudentRequest $request, $id)
-    // {
-    //     $student = Student::findOrFail($id);
-    //     $student->update($request->validated());
-
-    //     if ($request->has('parent_name')) {
-    //         $parent = $student->parent ?? new Parents(['student_id' => $student->id]);
-    //         $parent->fill([
-    //             'name' => $request->parent_name,
-    //             'date_of_birth' => $request->parent_date_of_birth,
-    //             'gender' => $request->parent_gender
-    //         ])->save();
-    //     }
-    //     return response()->json(['student' => $student, 'parent' => $student->parent]);
-    // }
-
     public function update(StudentRequest $request, $id)
     {
         $student = Student::findOrFail($id);
