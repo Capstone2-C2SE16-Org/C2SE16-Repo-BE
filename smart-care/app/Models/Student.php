@@ -26,7 +26,8 @@ class Student extends Authenticatable
         'phone_number',
         'username',
         'password',
-        'is_enable'
+        'is_enable',
+        'classroom_id'
     ];
 
     protected $hidden = [
@@ -43,7 +44,7 @@ class Student extends Authenticatable
         return $this->belongsTo(Classroom::class);
     }
 
-    public function parents(): HasOne
+    public function parent(): HasOne
     {
         return $this->hasOne(Parents::class);
     }

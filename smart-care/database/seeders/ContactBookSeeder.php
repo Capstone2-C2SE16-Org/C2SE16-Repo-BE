@@ -29,7 +29,7 @@ class ContactBookSeeder extends Seeder
                 'height' => $faker->numberBetween(140, 200), // Assuming height is in cm
                 'weight' => $faker->numberBetween(30, 150), // Assuming weight is in kg
                 'blood_pressure' => $faker->randomElement(['120/80', '130/85', '140/90']), // Example blood pressure values
-                'vesion_test' => $faker->randomElement(['Normal', 'Myopia', 'Hyperopia']), // Example vision test results
+                'vision_test' => $faker->randomElement(['Normal', 'Myopia', 'Hyperopia']), // Example vision test results
                 'total_absences' => $faker->numberBetween(0, 10),
                 'transcript' => $faker->randomFloat(2, 0, 10), // Assuming transcript is on a 0-10 scale
                 'comment' => $faker->paragraph,
@@ -44,7 +44,7 @@ class ContactBookSeeder extends Seeder
     //         'height' => '100',
     //         'weight' => '20',
     //         'blood_pressure' => '110/70',
-    //         'vesion_test' => 'Normal',
+    //         'vision_test' => 'Normal',
     //         'total_absences' => '5',
     //         'transcript' => '8.75',
     //         'comment' => 'Bé rất yêu thích và khám phá về động vật',

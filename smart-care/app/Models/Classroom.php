@@ -12,11 +12,13 @@ class Classroom extends Model
 {
     use HasFactory;
 
+    protected $table = 'classrooms';
+
     protected $fillable = [
         'name',
         'classroom_type_id',
-        'learning_schedule_id',
     ];
+
     public function classroom_type(): BelongsTo
     {
         return $this->belongsTo(ClassroomType::class);
@@ -32,9 +34,9 @@ class Classroom extends Model
         return $this->hasMany(Camera::class);
     }
 
-    public function classroom_managers(): HasMany
+    public function managers(): BelongsToMany
     {
-        return $this->hasMany(ClassroomManager::class);
+        return $this->belongsToMany(Manager::class, 'classroom_managers', 'classroom_id', 'manager_id');
     }
 
     public function learning_schedules(): BelongsToMany

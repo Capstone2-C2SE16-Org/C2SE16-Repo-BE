@@ -27,10 +27,6 @@
             text-align: center;
         }
 
-        /* .email-logo {
-            margin-bottom: 20px;
-        } */
-
         .email-button {
             background-color: #ffc107;
             color: #ffffff;
@@ -51,7 +47,6 @@
 
 <body>
     <div class="email-container">
-        {{-- <img class="email-logo" src="{{ asset('storage/image/logo.jpg') }}" alt="SmartCare Logo"  width="100"> --}}
         <h1>{{ $data['title'] }}</h1>
         <p>{{ $data['body'] }}</p>
         <a href="{{ $data['url'] }}" class="email-button">Đặt lại mật khẩu</a>

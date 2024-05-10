@@ -142,7 +142,7 @@ class AuthController extends Controller
         if ($user) {
             $user->password = Hash::make($request->password);
             $user->save();
-    
+            
             PasswordResetToken::where('email', $user->email)->delete();
     
             return response()->json(['success' => true, 'msg' => 'Your password has been reset successfully.']);
