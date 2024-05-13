@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Mobile\ClassroomController;
+use App\Http\Controllers\Mobile\ContactBookController;
 use App\Http\Controllers\Mobile\LearningScheduleController;
 use App\Http\Controllers\Mobile\MealScheduleController;
 use App\Http\Controllers\Mobile\StudentRequestController;
@@ -48,8 +49,11 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('classrooms')->group(function () {
-        Route::get('/', [ClassroomController::class, 'index']);
-        Route::get('/{classroomId}', [ClassroomController::class, 'show']);
+        Route::get('/', [ClassroomController::class, 'index'])->middleware('permission:classrooms.view');;
+        Route::get('/{classroomId}', [ClassroomController::class, 'show'])->middleware('permission:classrooms.view');;
+        Route::get('/{classroomId}/students', [ClassroomController::class, 'listStudents'])->middleware('permission:classrooms.view');
+        Route::get('/{classroomId}/students/{studentId}', [ClassroomController::class, 'getStudentDetails'])->middleware('permission:classrooms.view');
+        Route::patch('/{classroomId}/students/{studentId}/contact-book', [ClassroomController::class, 'updateContactBook'])->middleware('permission:classrooms.manage');
         Route::post('/{classroomId}/assign-teacher', [ClassroomController::class, 'assignTeacher'])->middleware(['permission:classrooms.manage']);
         Route::get('/{classroomId}/schedules', [ClassroomController::class, 'getClassroomSchedule']);
         Route::get('/{classroomId}/details', [ClassroomController::class, 'getClassroom']);
@@ -59,4 +63,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/{classroomId}/schedules/{id}', [LearningScheduleController::class, 'update'])->middleware('permission:learning_schedules.update');
         Route::delete('/{classroomId}/schedules/{id}', [LearningScheduleController::class, 'destroy'])->middleware('permission:learning_schedules.delete');
     });
+
+    Route::get('/contact-books/my', [ContactBookController::class, 'myContactBook']);
 });

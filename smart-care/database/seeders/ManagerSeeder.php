@@ -43,6 +43,9 @@ class ManagerSeeder extends Seeder
         $learning_schedule_delete = Permission::create(['name' => 'learning_schedules.delete']);
 
         $contact_book_view = Permission::create(['name' => 'contact_books.view']);
+        $contact_book_create = Permission::create(['name' => 'contact_books.create']);
+        $contact_book_update = Permission::create(['name' => 'contact_books.update']);
+        $contact_book_delete = Permission::create(['name' => 'contact_books.delete']);
 
         $admin_role = Role::create(['name' => 'admin']);
         $admin_role->givePermissionTo([
@@ -65,6 +68,9 @@ class ManagerSeeder extends Seeder
             $learning_schedule_update,
             $learning_schedule_delete,
             $contact_book_view,
+            $contact_book_create,
+            $contact_book_update,
+            $contact_book_delete,
         ]);
 
         $admin = Manager::create([
@@ -103,6 +109,9 @@ class ManagerSeeder extends Seeder
             $learning_schedule_update,
             $learning_schedule_delete,
             $contact_book_view,
+            $contact_book_create,
+            $contact_book_update,
+            $contact_book_delete,
         ]);
 
         $teacher_role = Role::create(['name' => 'teacher']);
@@ -112,11 +121,15 @@ class ManagerSeeder extends Seeder
             $student_request_view,
             $student_request_update,
             $classroom_view,
+            $classroom_manage,
             $learning_schedule_view,
             $learning_schedule_create,
             $learning_schedule_update,
             $learning_schedule_delete,
             $contact_book_view,
+            $contact_book_create,
+            $contact_book_update,
+            $contact_book_delete,
         ]);
 
         $coordinator_role = Role::create(['name' => 'coordinator']);
@@ -132,19 +145,27 @@ class ManagerSeeder extends Seeder
         $faker = Faker::create('vi_VN');
 
         foreach (range(1, 10) as $index) {
-            $name = $faker->name;
-            $asciiName = $this->removeAccents($name);
+            $lastName = $faker->lastName; 
+            $middleName = $faker->lastName; 
+            $firstName = $faker->firstName; 
+            $fullName = "$lastName $middleName $firstName";
+
+            $asciiLastName = Str::slug($lastName, '');
+            $asciiMiddleName = Str::slug($middleName, '');
+            $asciiFirstName = Str::slug($firstName, '');
+            $email = strtolower($asciiLastName. $asciiMiddleName . $asciiFirstName) . '@gmail.com';
+            $username = strtolower($asciiLastName. $asciiMiddleName . $asciiFirstName);
 
             $manager = Manager::create([
-                'name' => $name,
+                'name' => $fullName,
                 'address' => $faker->address,
                 'date_of_birth' => $faker->dateTimeBetween('-50 years', '-18 years')->format('Y-m-d'),
-                'email' => strtolower(str_replace(' ', '', $asciiName)) . '@gmail.com',
+                'email' => $email,
                 'email_verified_at' => now(),
                 'gender' => rand(0, 1),
                 'profile_image' => "https://picsum.photos/200/200?random=" . mt_rand(1000, 9999),
                 'phone_number' => $faker->phoneNumber,
-                'username' => strtolower(str_replace(' ', '', $asciiName)),
+                'username' => $username,
                 'password' => Hash::make('password'),
                 'is_enable' => true,
                 'remember_token' => Str::random(10),
@@ -162,11 +183,15 @@ class ManagerSeeder extends Seeder
                     $student_request_view,
                     $student_request_update,
                     $classroom_view,
+                    $classroom_manage,
                     $learning_schedule_view,
                     $learning_schedule_create,
                     $learning_schedule_update,
                     $learning_schedule_delete,
                     $contact_book_view,
+                    $contact_book_create,
+                    $contact_book_update,
+                    $contact_book_delete,
                 ]);
             } else if ($assignedRole->name === 'coordinator') {
                 $manager->givePermissionTo([
@@ -179,10 +204,5 @@ class ManagerSeeder extends Seeder
                 ]);
             }
         }
-    }
-
-    private function removeAccents($string)
-    {
-        return Str::slug($string, '');
     }
 }

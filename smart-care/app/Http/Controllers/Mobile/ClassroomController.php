@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Mobile;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ClassroomResource;
+use App\Http\Resources\ContactBookResource;
+use App\Http\Resources\StudentDetailResource;
 use App\Models\Classroom;
 use App\Models\Manager;
 use Carbon\Carbon;
@@ -22,6 +24,72 @@ class ClassroomController extends Controller
     {
         $classroom = Classroom::find($classroomId);
         return response()->json($classroom);
+    }
+
+    public function listStudents($classroomId)
+    {
+        $classroom = Classroom::with('students')->findOrFail($classroomId);
+
+        $this->authorize('view', $classroom);
+
+        $students = $classroom->students->map(function ($student) {
+            return [
+                'id' => $student->id,
+                'name' => $student->name,
+                'nickname' => $student->nickname,
+                'profile_image' => $student->profile_image
+            ];
+        });
+
+        return response()->json($students);
+    }
+
+    public function getStudentDetails($classroomId, $studentId)
+    {
+        $classroom = Classroom::with(['students' => function ($query) use ($studentId) {
+            $query->where('id', $studentId)->with('parents');
+        }])->findOrFail($classroomId);
+
+        $this->authorize('view', $classroom);
+
+        if ($classroom->students->isEmpty()) {
+            return response()->json(['message' => 'Student not found in this classroom'], 404);
+        }
+
+        $student = $classroom->students->first();
+
+        return new StudentDetailResource($student);
+    }
+
+    public function updateContactBook(Request $request, $classroomId, $studentId)
+    {
+        $classroom = Classroom::findOrFail($classroomId);
+        
+        if (!$this->authorize('manage', $classroom)) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $student = $classroom->students()->where('id', $studentId)->firstOrFail();
+        $contactBook = $student->contact_books()->firstOrCreate(['student_id' => $studentId]);
+
+        $validated = $request->validate([
+            'height' => 'required|numeric',
+            'weight' => 'required|numeric',
+            'blood_group' => 'required|string',
+            'blood_pressure' => 'required|string',
+            'vision_test' => 'required|string',
+            'allergies' => 'nullable|string',
+            'total_absences' => 'required|integer',
+            'good_behavior_certificates' => 'nullable|array',
+            'comment' => 'nullable|string',
+        ]);
+
+        $contactBook->update($validated);
+
+        return response()->json([
+            'message' => 'Contact book updated successfully',
+            'data' => new ContactBookResource($contactBook)
+        ]);
     }
 
     public function assignTeacher(Request $request, $classroomId)

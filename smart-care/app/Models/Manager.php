@@ -74,7 +74,7 @@ class Manager extends Authenticatable
 
     public function classrooms(): BelongsToMany
     {
-        return $this->belongsToMany(Classroom::class);
+        return $this->belongsToMany(Classroom::class, 'classroom_managers', 'manager_id', 'classroom_id');
     }
 
     public function announcements(): HasMany

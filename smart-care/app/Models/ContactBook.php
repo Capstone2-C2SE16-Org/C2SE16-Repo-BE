@@ -14,12 +14,18 @@ class ContactBook extends Model
     protected $fillable = [
         'height', 
         'weight', 
+        'blood_group',
         'blood_pressure', 
         'vision_test', 
-        'total_absences', 
-        'transcript', 
+        'allergies',
+        'total_absences',
+        'good_behavior_certificates',
         'comment', 
-        'student_id'
+        'student_id' 
+    ];
+
+    protected $casts = [
+        'good_behavior_certificates' => 'array' 
     ];
 
     public function student(): BelongsTo
