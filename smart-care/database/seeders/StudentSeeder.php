@@ -18,24 +18,30 @@ class StudentSeeder extends Seeder
     {
         $faker = Faker::create('vi_VN');
         $classroomIds = Classroom::all()->pluck('id');
+        $diminutives = ['Bé', 'Tiểu', 'Nho', 'Chibi']; 
 
-        for ($i = 0; $i < 10; $i++) {
-            $firstName = $faker->firstName;
-            $lastName = $faker->lastName;
-            $fullName = "$firstName $lastName";
+        for ($i = 0; $i < 20; $i++) {
+            $lastName = $faker->lastName; 
+            $middleName = $faker->lastName; 
+            $firstName = $faker->firstName; 
+            $fullName = "$lastName $middleName $firstName";
 
-            $asciiFirstName = Str::slug($firstName, '');
+            $nickname = $diminutives[array_rand($diminutives)] . ' ' . $firstName . ' ' . $this->randomEmoji();
+
             $asciiLastName = Str::slug($lastName, '');
-            $email = strtolower($asciiFirstName . $asciiLastName) . '@gmail.com';
-            $username = strtolower($asciiFirstName . $asciiLastName);
+            $asciiMiddleName = Str::slug($middleName, '');
+            $asciiFirstName = Str::slug($firstName, '');
+            $email = strtolower($asciiLastName. $asciiMiddleName . $asciiFirstName) . '@gmail.com';
+            $username = strtolower($asciiLastName. $asciiMiddleName . $asciiFirstName);
             $dob = $faker->dateTimeBetween('-6 years', '-3 years')->format('Y-m-d');
 
             $avatarUrl = "https://picsum.photos/200/200?random=" . mt_rand(1000, 9999);
 
             Student::create([
                 'name' => $fullName,
+                'nickname' => $nickname,
                 'address' => $faker->address,
-                'day_of_birth' => $dob,
+                'date_of_birth' => $dob,
                 'email' => $email,
                 'gender' => $faker->boolean,
                 'profile_image' => $avatarUrl,
@@ -46,5 +52,10 @@ class StudentSeeder extends Seeder
                 'is_enable' => true,
             ]);
         }
+    }
+
+    private function randomEmoji() {
+        $emojis = ['🌟', '🚀', '🎈', '🌸', '🐾'];
+        return $emojis[array_rand($emojis)];
     }
 }

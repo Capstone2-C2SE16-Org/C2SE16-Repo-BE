@@ -10,6 +10,14 @@ class LearningSchedule extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'date', 
+        'morning', 
+        'noon', 
+        'afternoon'
+    ];
+
     public function classrooms(): BelongsToMany
     {
         return $this->belongsToMany(Classroom::class);

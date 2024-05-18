@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('nickname')->nullable();
             $table->string('address');
-            $table->date('day_of_birth');
+            $table->date('date_of_birth');
             $table->string('email')->unique();
             $table->boolean('gender');
             $table->string('profile_image')->nullable();

@@ -18,15 +18,22 @@ class ParentSeeder extends Seeder
     {
         $studentIds = Student::all()->pluck('id');
         $student_id = $studentIds->random();
-        $faker = Faker::create();
-        $studentIds = Student::all()->pluck('id')->toArray(); // Xóa `student_id` đã chọn để không sử dụng lại
-        foreach (range(1, 10) as $index) {
-            $randomIndex = array_rand($studentIds);// Xóa `student_id` đã chọn để không sử dụng lại
-            $student_id = $studentIds[$randomIndex]; // Xóa `student_id` đã chọn để không sử dụng lại
-            unset($studentIds[$randomIndex]); // Xóa `student_id` đã chọn để không sử dụng lại
+        $faker = Faker::create('vi_VN');
+        $studentIds = Student::all()->pluck('id')->toArray(); 
+        foreach (range(1, 20) as $index) {
+            $lastName = $faker->lastName; 
+            $middleName = $faker->lastName; 
+            $firstName = $faker->firstName; 
+            $fullName = "$lastName $middleName $firstName";
+
+            $dob = $faker->dateTimeBetween('-50 years', '-18 years')->format('Y-m-d');
+
+            $randomIndex = array_rand($studentIds);
+            $student_id = $studentIds[$randomIndex]; 
+            unset($studentIds[$randomIndex]);
             DB::table('parents')->insert([
-                'name' => $faker->name,
-                'date_of_birth' => $faker->date,
+                'name' => $fullName,
+                'date_of_birth' => $dob,
                 'gender' => $faker->numberBetween(0, 1),
                 'student_id' => $student_id,
                 'created_at' => now(),

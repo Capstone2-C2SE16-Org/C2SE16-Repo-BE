@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             ClassroomTypeSeeder::class,
             ClassroomSeeder::class,
             LearningScheduleSeeder::class,
+            ClassroomLearningScheduleSeeder::class,
             StudentSeeder::class,
             ParentSeeder::class,
             ClassroomManagerSeeder::class,
@@ -31,14 +32,5 @@ class DatabaseSeeder extends Seeder
             MealScheduleSeeder::class,
             ManagerRoleSeeder::class,
         ]);
-
-
-
-
-        // DB::table('Manager')->insert([
-        //     'name' => Str::random(10),
-        //     'email' => Str::random(10).'@example.com',
-        //     'password' => Hash::make('password'),
-        // ]);
     }
 }

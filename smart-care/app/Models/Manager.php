@@ -23,7 +23,7 @@ class Manager extends Authenticatable
     protected $fillable = [
         'name',
         'address',
-        'day_of_birth',
+        'date_of_birth',
         'email',
         'gender',
         'profile_image',
@@ -72,13 +72,18 @@ class Manager extends Authenticatable
         return $this->hasMany(ContactBookManager::class);
     }
 
-    public function classroom_managers(): HasMany
+    public function classrooms(): BelongsToMany
     {
-        return $this->hasMany(ClassroomManager::class);
+        return $this->belongsToMany(Classroom::class, 'classroom_managers', 'manager_id', 'classroom_id');
     }
 
     public function announcements(): HasMany
     {
         return $this->hasMany(Announcement::class);
+    }
+
+    public function isStudent()
+    {
+        return $this->roles->pluck('name')->contains('student');
     }
 }   

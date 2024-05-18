@@ -20,23 +20,16 @@ class MealScheduleSeeder extends Seeder
      */
     public function run(): void
     {
-        $startOfWeek = Carbon::now()->startOfWeek();
+        $startOfWeek = Carbon::now()->startOfWeek(Carbon::MONDAY);
         $mealsForTheWeek = $this->generateWeeklyMealPlan();
 
-        for ($day = 0; $day < 6; $day++) {
+        for ($day = 0; $day < 5; $day++) {
             $date = $startOfWeek->copy()->addDays($day);
-
-            if ($date->dayOfWeek == Carbon::SUNDAY) {
-                $startOfWeek->addWeek();
-                $day = -1;
-                continue;
-            }
-
             $meals = $mealsForTheWeek[$day];
 
             DB::table('meal_schedules')->insert([
                 'date' => $date->toDateString(),
-                'morning' => $meals['morning'], 
+                'morning' => $meals['morning'],
                 'noon' => $meals['noon'],
                 'afternoon' => $meals['afternoon'],
                 'created_at' => Carbon::now(),
@@ -48,7 +41,7 @@ class MealScheduleSeeder extends Seeder
     private function generateWeeklyMealPlan(): array
     {
         $weeklyMealPlan = [];
-        for ($i = 0; $i < 6; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             $weeklyMealPlan[] = [
                 'morning' => $this->randomMeal(['grains', 'dairy']),
                 'noon' => $this->randomMeal(['proteins', 'vegetables', 'grains']),
@@ -57,7 +50,7 @@ class MealScheduleSeeder extends Seeder
         }
         return $weeklyMealPlan;
     }
-    
+
     private function randomMeal(array $groups): string
     {
         $meal = [];
