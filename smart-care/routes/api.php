@@ -5,6 +5,7 @@ use App\Http\Controllers\Mobile\ClassroomController;
 use App\Http\Controllers\Mobile\LearningScheduleController;
 use App\Http\Controllers\Mobile\MealScheduleController;
 use App\Http\Controllers\Mobile\StudentRequestController;
+use App\Http\Controllers\Web\ManagerController;
 use App\Http\Controllers\Web\StudentController;
 use App\Http\Resources\ManagerResource;
 use Illuminate\Http\Request;
@@ -65,4 +66,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [StudentController::class, 'destroy'])->middleware('permission:students.delete');
     });
 
+    Route::prefix('managers')->group(function () {
+        Route::get('/', [ManagerController::class, 'index'])->middleware('permission:managers.list');
+        Route::post('/', [ManagerController::class, 'store'])->middleware('permission:managers.create');
+        Route::get('/{id}', [ManagerController::class, 'show'])->middleware('permission:managers.view');
+        Route::put('/{id}', [ManagerController::class, 'update'])->middleware('permission:managers.update');
+        Route::delete('/{id}', [ManagerController::class, 'destroy'])->middleware('permission:managers.delete');
+    });
 });
