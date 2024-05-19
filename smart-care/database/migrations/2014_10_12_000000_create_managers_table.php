@@ -25,6 +25,8 @@ return new class extends Migration
             $table->string('password');
             $table->boolean('is_enable')->default(1); 
             $table->rememberToken();
+            $table->unsignedBigInteger('ward_id');
+            $table->foreign('ward_id')->references('id')->on('wards')->onDelete('cascade');
             $table->timestamps();
         });
     }

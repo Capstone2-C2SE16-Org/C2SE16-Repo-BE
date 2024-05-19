@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use App\Models\Classroom;
+use App\Models\Ward;
 use Faker\Factory as Faker;
 
 class StudentSeeder extends Seeder
@@ -19,6 +20,11 @@ class StudentSeeder extends Seeder
         $faker = Faker::create('vi_VN');
         $classroomIds = Classroom::all()->pluck('id');
         $diminutives = ['Bé', 'Tiểu', 'Nho', 'Chibi']; 
+
+        if (Ward::count() == 0) {
+            $this->command->info('No wards found. Please run the import command: php artisan vietnamzone:import');
+            return;
+        }
 
         for ($i = 0; $i < 20; $i++) {
             $lastName = $faker->lastName; 
@@ -37,10 +43,16 @@ class StudentSeeder extends Seeder
 
             $avatarUrl = "https://picsum.photos/200/200?random=" . mt_rand(1000, 9999);
 
+            $ward = Ward::inRandomOrder()->first();
+            $district = $ward->district;
+            $province = $district->province;
+
+            $address = $faker->streetAddress . ', ' . $ward->name . ', ' . $district->name . ', ' . $province->name;
+
             Student::create([
                 'name' => $fullName,
                 'nickname' => $nickname,
-                'address' => $faker->address,
+                'address' => $address,
                 'date_of_birth' => $dob,
                 'email' => $email,
                 'gender' => $faker->boolean,
@@ -49,6 +61,7 @@ class StudentSeeder extends Seeder
                 'username' => $username,
                 'password' => Hash::make('password'),
                 'classroom_id' => $classroomIds->random(),
+                'ward_id' => $ward->id,
                 'is_enable' => true,
             ]);
         }

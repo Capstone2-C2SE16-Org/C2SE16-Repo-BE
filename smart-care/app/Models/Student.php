@@ -28,7 +28,8 @@ class Student extends Authenticatable
         'username',
         'password',
         'is_enable',
-        'classroom_id'
+        'classroom_id',
+        'ward_id'
     ];
 
     protected $hidden = [
@@ -63,5 +64,10 @@ class Student extends Authenticatable
     public function contact_books(): HasOne
     {
         return $this->hasOne(ContactBook::class);
+    }
+
+    public function ward(): BelongsTo
+    {
+        return $this->belongsTo(Ward::class);
     }
 }

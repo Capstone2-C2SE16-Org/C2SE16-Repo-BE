@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logo
 Route::post('forget-password', [AuthController::class, 'forgetPassword']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/manager', function (Request $request) {
+    Route::get('/manager', function (Request $request) {   
         return new ManagerResource($request->user());
     });
 
