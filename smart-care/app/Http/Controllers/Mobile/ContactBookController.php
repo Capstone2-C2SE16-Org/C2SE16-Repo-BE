@@ -27,6 +27,7 @@ class ContactBookController extends Controller
         $data = [
             'name' => $student->name,
             'nickname' => $student->nickname,
+            'date_of_birth' => $student->date_of_birth,
             'profile_image' => $student->profile_image,
             'classroom' => $student->classroom->name,
             'health_information' => [

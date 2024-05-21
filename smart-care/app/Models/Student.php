@@ -29,7 +29,9 @@ class Student extends Authenticatable
         'password',
         'is_enable',
         'classroom_id',
-        'ward_id'
+        'ward_id',
+        'district_id',
+        'province_id'
     ];
 
     protected $hidden = [
@@ -46,7 +48,7 @@ class Student extends Authenticatable
         return $this->belongsTo(Classroom::class);
     }
 
-    public function parents(): HasOne
+    public function parent(): HasOne
     {
         return $this->hasOne(Parents::class);
     }
@@ -69,5 +71,20 @@ class Student extends Authenticatable
     public function ward(): BelongsTo
     {
         return $this->belongsTo(Ward::class);
+    }
+
+    public function district(): BelongsTo
+    {
+        return $this->belongsTo(District::class);
+    }
+
+    public function province(): BelongsTo
+    {
+        return $this->belongsTo(Province::class);
+    }
+
+    public function getFullAddressAttribute()
+    {
+        return $this->address . ', ' . $this->ward->name . ', ' . $this->district->name . ', ' . $this->province->name;
     }
 }

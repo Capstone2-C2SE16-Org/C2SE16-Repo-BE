@@ -32,7 +32,9 @@ class Manager extends Authenticatable
         'username',
         'password',
         'is_enable',
-        'ward_id'
+        'ward_id',
+        'district_id',
+        'province_id'
     ];
 
     /**
@@ -87,6 +89,16 @@ class Manager extends Authenticatable
     public function ward(): BelongsTo
     {
         return $this->belongsTo(Ward::class);
+    }
+
+    public function district(): BelongsTo
+    {
+        return $this->belongsTo(District::class);
+    }
+
+    public function province(): BelongsTo
+    {
+        return $this->belongsTo(Province::class);
     }
 
     public function isStudent()

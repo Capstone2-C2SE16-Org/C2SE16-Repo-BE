@@ -43,7 +43,18 @@ class StudentRequestController extends Controller
 
         $validatedData['manager_id'] = $teacher->id;
         $validatedData['status'] = false;
+        $validatedData['student_id'] = Auth::id();
 
+        $teacher = Manager::role('teacher')->inRandomOrder()->first();
+
+        if (!$teacher) {
+            return response()->json(['message' => 'No teacher available to assign request.'], 422);
+        }
+
+        $validatedData['manager_id'] = $teacher->id;
+        $validatedData['status'] = false;
+
+        $studentRequest = StudentRequest::create($validatedData);
         $studentRequest = StudentRequest::create($validatedData);
 
         return response()->json($studentRequest, 201);

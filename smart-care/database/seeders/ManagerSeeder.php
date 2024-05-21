@@ -46,7 +46,13 @@ class ManagerSeeder extends Seeder
             'tuitions.view',
             'tuitions.create',
             'tuitions.update',
-            'tuitions.delete'
+            'tuitions.delete',
+            'students.list',
+            'students.view',
+            'students.create',
+            'students.update',
+            'students.delete',
+            'locations.view'
         ];
 
         foreach ($permissions as $permission) {
@@ -71,6 +77,8 @@ class ManagerSeeder extends Seeder
             'is_enable' => 1,
             'remember_token' => Str::random(10),
             'ward_id' => 6389,
+            'district_id' => 358,
+            'province_id' => 32
         ]);
 
         $admin->syncRoles($admin_role);
@@ -151,6 +159,8 @@ class ManagerSeeder extends Seeder
                 'is_enable' => true,
                 'remember_token' => Str::random(10),
                 'ward_id' => $ward->id,
+                'district_id' => $district->id,
+                'province_id' => $province->id,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

@@ -28,6 +28,10 @@ return new class extends Migration
             $table->foreign('classroom_id')->references('id')->on('classrooms')->onDelete('cascade');
             $table->unsignedBigInteger('ward_id');
             $table->foreign('ward_id')->references('id')->on('wards')->onDelete('cascade');
+            $table->unsignedBigInteger('district_id');
+            $table->foreign('district_id')->references('id')->on('districts')->onDelete('cascade');
+            $table->unsignedBigInteger('province_id');
+            $table->foreign('province_id')->references('id')->on('provinces')->onDelete('cascade');
             $table->timestamps();
         });
     }

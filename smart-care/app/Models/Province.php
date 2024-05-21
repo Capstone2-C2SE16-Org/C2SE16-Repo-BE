@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Province extends Model
 {
@@ -24,5 +25,15 @@ class Province extends Model
     public function districts()
     {
         return $this->hasMany(District::class);
+    }
+
+    public function managers(): HasMany
+    {
+        return $this->hasMany(Manager::class);
+    }
+
+    public function students(): HasMany
+    {
+        return $this->hasMany(Student::class);
     }
 }

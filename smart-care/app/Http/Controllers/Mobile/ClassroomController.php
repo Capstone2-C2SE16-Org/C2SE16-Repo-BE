@@ -47,7 +47,7 @@ class ClassroomController extends Controller
     public function getStudentDetails($classroomId, $studentId)
     {
         $classroom = Classroom::with(['students' => function ($query) use ($studentId) {
-            $query->where('id', $studentId)->with('parents');
+            $query->where('id', $studentId)->with('parent');
         }])->findOrFail($classroomId);
 
         $this->authorize('view', $classroom);

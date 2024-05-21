@@ -62,6 +62,8 @@ class StudentSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'classroom_id' => $classroomIds->random(),
                 'ward_id' => $ward->id,
+                'district_id' => $district->id,
+                'province_id' => $province->id,
                 'is_enable' => true,
             ]);
         }
