@@ -28,7 +28,7 @@ class StudentRequestController extends Controller
 
         return response()->json($studentRequest);
     }
-
+ 
     public function store(StoreStudentRequest $request)
     {
         $validatedData = $request->validated();
