@@ -34,7 +34,7 @@ class AuthController extends Controller
 
     public function studentLogin(LoginRequest $request)
     {
-        $student = Student::where('username', $request->username)->first();
+        $student = Student::with('classroom')->where('username', $request->username)->first();
 
         if ($student && Hash::check($request->password, $student->password)) {
             $token = $student->createToken('Token')->plainTextToken;
@@ -52,6 +52,10 @@ class AuthController extends Controller
                     'phone_number' => $student->phone_number,
                     'username' => $student->username,
                     'is_enable' => $student->is_enable,
+                    'classroom' => [
+                        'id' => $student->classroom->id,
+                        'name' => $student->classroom->name,
+                    ],
                     'token' => $token,
                 ]
             ], 200);

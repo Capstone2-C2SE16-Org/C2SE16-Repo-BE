@@ -52,7 +52,11 @@ class ManagerSeeder extends Seeder
             'students.create',
             'students.update',
             'students.delete',
-            'locations.view'
+            'locations.view',
+            'announcements.view',     
+            'announcements.create',      
+            'announcements.update',      
+            'announcements.delete',      
         ];
 
         foreach ($permissions as $permission) {
@@ -89,6 +93,7 @@ class ManagerSeeder extends Seeder
             'managers.view',
             'student_requests.view',
             'student_requests.update',
+            'student_requests.delete',
             'classrooms.view',
             'classrooms.manage',
             'learning_schedules.view',
@@ -114,7 +119,11 @@ class ManagerSeeder extends Seeder
             'tuitions.create',
             'tuitions.view',
             'tuitions.update',
-            'tuitions.delete'
+            'tuitions.delete',
+            'announcements.view',     
+            'announcements.create',      
+            'announcements.update',      
+            'announcements.delete',    
         ];
 
         $coordinator_role = Role::firstOrCreate(['name' => 'coordinator']);

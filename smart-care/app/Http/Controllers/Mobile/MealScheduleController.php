@@ -9,29 +9,45 @@ use Illuminate\Support\Facades\DB;
 
 class MealScheduleController extends Controller
 {
+    // public function getCurrentWeek()
+    // {
+    //     $today = Carbon::today();
+
+    //     if ($today->isWeekend() || ($today->dayOfWeek === Carbon::FRIDAY && now()->hour >= 15)) {
+    //         $nextMonday = $today->next(Carbon::MONDAY);
+    //         $mealSchedules = MealSchedule::whereBetween('date', [$nextMonday, $nextMonday->copy()->addDays(4)])->get();
+
+    //         if ($mealSchedules->isEmpty()) {
+    //             $this->generateWeeklyMealPlan($nextMonday);
+    //             $mealSchedules = MealSchedule::whereBetween('date', [$nextMonday, $nextMonday->copy()->addDays(4)])->get();
+    //         }
+
+    //         return response()->json($mealSchedules);
+    //     }
+
+    //     $mealSchedule = MealSchedule::where('date', $today)->first();
+    //     if (!$mealSchedule && !$today->isWeekend()) {
+    //         $this->generateWeeklyMealPlan($today->startOfWeek());
+    //         $mealSchedule = MealSchedule::where('date', $today)->first();
+    //     }
+
+    //     return response()->json($mealSchedule ?: ['error' => 'No meal scheduled for today']);
+    // }
+
     public function getCurrentWeek()
     {
         $today = Carbon::today();
+        $startOfWeek = $today->startOfWeek(Carbon::MONDAY);
+        $endOfWeek = $startOfWeek->copy()->addDays(4); 
 
-        if ($today->isWeekend() || ($today->dayOfWeek === Carbon::FRIDAY && now()->hour >= 15)) {
-            $nextMonday = $today->next(Carbon::MONDAY);
-            $mealSchedules = MealSchedule::whereBetween('date', [$nextMonday, $nextMonday->copy()->addDays(4)])->get();
+        $mealSchedules = MealSchedule::whereBetween('date', [$startOfWeek, $endOfWeek])->get();
 
-            if ($mealSchedules->isEmpty()) {
-                $this->generateWeeklyMealPlan($nextMonday);
-                $mealSchedules = MealSchedule::whereBetween('date', [$nextMonday, $nextMonday->copy()->addDays(4)])->get();
-            }
-
-            return response()->json($mealSchedules);
+        if ($mealSchedules->isEmpty()) {
+            $this->generateWeeklyMealPlan($startOfWeek);
+            $mealSchedules = MealSchedule::whereBetween('date', [$startOfWeek, $endOfWeek])->get();
         }
 
-        $mealSchedule = MealSchedule::where('date', $today)->first();
-        if (!$mealSchedule && !$today->isWeekend()) {
-            $this->generateWeeklyMealPlan($today->startOfWeek());
-            $mealSchedule = MealSchedule::where('date', $today)->first();
-        }
-
-        return response()->json($mealSchedule ?: ['error' => 'No meal scheduled for today']);
+        return response()->json($mealSchedules);
     }
 
     private function generateWeeklyMealPlan(Carbon $startOfWeek): void
@@ -45,7 +61,7 @@ class MealScheduleController extends Controller
             'vegetables' => ['Rau cải', 'Cà rốt', 'Cà chua', 'Dưa chuột']
         ];
 
-        for ($i = 0; $i < 5; $i++) { 
+        for ($i = 0; $i < 5; $i++) {
             $mealsForTheWeek[] = [
                 'date' => $startOfWeek->copy()->addDays($i)->toDateString(),
                 'morning' => $this->composeMeal($foodGroups, ['grains', 'dairy']),

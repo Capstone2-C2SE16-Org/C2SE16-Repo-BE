@@ -15,7 +15,7 @@ class StudentRequestController extends Controller
     {
         $this->authorize('student_requests.view');
 
-        $studentRequests = StudentRequest::all();
+        $studentRequests = StudentRequest::with('student', 'manager')->get();
 
         return response()->json($studentRequests);
     }
@@ -24,7 +24,7 @@ class StudentRequestController extends Controller
     {
         $this->authorize('student_requests.view');
 
-        $studentRequest = StudentRequest::findOrFail($id);
+        $studentRequest = StudentRequest::with('student', 'manager')->findOrFail($id);
 
         return response()->json($studentRequest);
     }

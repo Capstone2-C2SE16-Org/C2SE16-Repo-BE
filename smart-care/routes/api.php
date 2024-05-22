@@ -66,6 +66,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{classroomId}/schedules/{id}', [LearningScheduleController::class, 'destroy'])->middleware('permission:learning_schedules.delete');
     });
 
+    Route::get('/teacher/{teacherId}/classrooms', [ClassroomController::class, 'getTeacherClassrooms']);
+
     Route::get('/contact-books/my', [ContactBookController::class, 'myContactBook']);
 
     Route::prefix('students')->group(function () {
