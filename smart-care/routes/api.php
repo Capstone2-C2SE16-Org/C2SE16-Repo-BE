@@ -57,9 +57,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/{classroomId}/assign-teacher', [ClassroomController::class, 'assignTeacher'])->middleware(['permission:classrooms.manage']);
         Route::get('/{classroomId}/schedules', [ClassroomController::class, 'getClassroomSchedule']);
         Route::get('/{classroomId}/details', [ClassroomController::class, 'getClassroom']);
+        //Lich Hoc
         Route::get('/{classroomId}/schedules/current', [ClassroomController::class, 'getCurrentWeek']);
-
-        Route::post('/{classroomId}/schedules', [LearningScheduleController::class, 'store'])->middleware(['permission:learning_schedules.create']);
+        Route::post('/{classroomId}/schedules', [LearningScheduleController::class, 'store'])->middleware(['per mission:learning_schedules.create']);
         Route::put('/{classroomId}/schedules/{id}', [LearningScheduleController::class, 'update'])->middleware('permission:learning_schedules.update');
         Route::delete('/{classroomId}/schedules/{id}', [LearningScheduleController::class, 'destroy'])->middleware('permission:learning_schedules.delete');
     });
