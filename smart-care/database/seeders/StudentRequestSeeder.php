@@ -8,6 +8,7 @@ use Faker\Factory as Faker;
 use Illuminate\Support\Facades\DB;
 use App\Models\Student;
 use App\Models\Manager;
+use Spatie\Permission\Models\Role;
 
 class StudentRequestSeeder extends Seeder
 {
@@ -19,7 +20,9 @@ class StudentRequestSeeder extends Seeder
         $faker = Faker::create('vi_VN');
 
         $studentIds = Student::all()->pluck('id');
-        $managerIds = Manager::all()->pluck('id');
+
+        $teacherRole = Role::where('name', 'teacher')->first();
+        $managerIds = Manager::role($teacherRole)->pluck('id');
 
         $fixedReturnDate = now()->addWeeks(2)->format('Y-m-d');
 

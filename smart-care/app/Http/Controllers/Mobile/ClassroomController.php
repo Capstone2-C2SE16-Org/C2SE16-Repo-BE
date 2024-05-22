@@ -11,6 +11,7 @@ use App\Models\Manager;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Role;
 
 class ClassroomController extends Controller
 {
@@ -47,7 +48,7 @@ class ClassroomController extends Controller
     public function getStudentDetails($classroomId, $studentId)
     {
         $classroom = Classroom::with(['students' => function ($query) use ($studentId) {
-            $query->where('id', $studentId)->with('parents');
+            $query->where('id', $studentId)->with('parent');
         }])->findOrFail($classroomId);
 
         $this->authorize('view', $classroom);
@@ -148,4 +149,57 @@ class ClassroomController extends Controller
 
         return response()->json($classroom->learning_schedules);
     }
+
+    public function getTeacherClassrooms($teacherId)
+    {
+        $teacher = Manager::with('classrooms.students')->findOrFail($teacherId);
+
+        if (!$teacher->hasRole('teacher')) {
+            return response()->json(['message' => 'User is not a teacher'], 400);
+        }
+
+        $classrooms = $teacher->classrooms;
+        return response()->json($classrooms);
+    }
+
+    // public function getTeacherClassrooms()
+    // {
+    //     $teacher = Auth::user();
+
+    //     $teacherRole = Role::findByName('teacher');
+    //     if (!$teacher->roles->contains($teacherRole)) {
+    //         return response()->json(['message' => 'User is not a teacher'], 400);
+    //     }
+
+    //     $classrooms = Classroom::with('students')
+    //         ->whereHas('managers', function ($query) use ($teacher) {
+    //             $query->where('manager_id', $teacher->id);
+    //         })
+    //         ->get();
+
+    //     return response()->json($classrooms);
+    // }
+
+    // public function getTeacherClassrooms()
+    // {
+    //     $teacher = Auth::user();
+
+    //     // Check if the user has the 'teacher' role
+    //     if (!$teacher->hasRole('teacher')) {
+    //         return response()->json(['message' => 'User is not a teacher'], 400);
+    //     }
+
+    //     // Fetch classrooms managed by the teacher
+    //     $classrooms = Classroom::with('students')
+    //         ->whereHas('managers', function ($query) use ($teacher) {
+    //             $query->where('manager_id', $teacher->id);
+    //         })
+    //         ->get();
+
+    //     if ($classrooms->isEmpty()) {
+    //         return response()->json(['message' => 'No classrooms found for this teacher'], 404);
+    //     }
+
+    //     return response()->json($classrooms);
+    // }
 }

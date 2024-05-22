@@ -15,7 +15,7 @@ class StudentRequestController extends Controller
     {
         $this->authorize('student_requests.view');
 
-        $studentRequests = StudentRequest::all();
+        $studentRequests = StudentRequest::with('student', 'manager')->get();
 
         return response()->json($studentRequests);
     }
@@ -24,7 +24,7 @@ class StudentRequestController extends Controller
     {
         $this->authorize('student_requests.view');
 
-        $studentRequest = StudentRequest::findOrFail($id);
+        $studentRequest = StudentRequest::with('student', 'manager')->findOrFail($id);
 
         return response()->json($studentRequest);
     }
@@ -43,7 +43,18 @@ class StudentRequestController extends Controller
 
         $validatedData['manager_id'] = $teacher->id;
         $validatedData['status'] = false;
+        $validatedData['student_id'] = Auth::id();
 
+        $teacher = Manager::role('teacher')->inRandomOrder()->first();
+
+        if (!$teacher) {
+            return response()->json(['message' => 'No teacher available to assign request.'], 422);
+        }
+
+        $validatedData['manager_id'] = $teacher->id;
+        $validatedData['status'] = false;
+
+        $studentRequest = StudentRequest::create($validatedData);
         $studentRequest = StudentRequest::create($validatedData);
 
         return response()->json($studentRequest, 201);
