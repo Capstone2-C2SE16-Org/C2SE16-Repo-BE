@@ -56,7 +56,8 @@ class ManagerSeeder extends Seeder
             'announcements.view',     
             'announcements.create',      
             'announcements.update',      
-            'announcements.delete',      
+            'announcements.delete',  
+            'teachers.view',    
         ];
 
         foreach ($permissions as $permission) {
@@ -103,7 +104,8 @@ class ManagerSeeder extends Seeder
             'contact_books.view',
             'contact_books.create',
             'contact_books.update',
-            'contact_books.delete'
+            'contact_books.delete',
+            'teachers.view'
         ];
 
         $teacher_role = Role::firstOrCreate(['name' => 'teacher']);
