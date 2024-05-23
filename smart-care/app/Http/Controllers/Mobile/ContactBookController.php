@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Mobile;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ContactBookDetailResource;
+use App\Models\Classroom;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,9 +42,24 @@ class ContactBookController extends Controller
             ],
             'total_absences' => $contactBook->total_absences,
             'good_behavior_certificates' => $contactBook->good_behavior_certificates,
-            'comments' => $contactBook->comment
+            'comment' => $contactBook->comment
         ];
 
         return response()->json($data);
+    }
+
+    public function showContactBook($classroomId, $studentId)
+    {
+        $classroom = Classroom::with('managers')->findOrFail($classroomId);
+
+        $user = Auth::user();
+        if (!$classroom->managers->contains($user->id)) {
+            return response()->json(['message' => 'Unauthorized access - not your classroom'], 403);
+        }
+
+        $student = $classroom->students()->where('id', $studentId)->with('contact_books')->firstOrFail();
+        $contactBook = $student->contact_books;
+
+        return response()->json(new ContactBookDetailResource($contactBook));
     }
 }

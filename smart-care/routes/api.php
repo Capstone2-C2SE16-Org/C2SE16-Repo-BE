@@ -51,11 +51,12 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('classrooms')->group(function () {
-        Route::get('/', [ClassroomController::class, 'index'])->middleware('permission:classrooms.view');;
+        Route::get('/', [ClassroomController::class, 'index'])->middleware('permission:classrooms.view');
         Route::get('/{classroomId}', [ClassroomController::class, 'show'])->middleware('permission:classrooms.view');;
         Route::get('/{classroomId}/students', [ClassroomController::class, 'listStudents'])->middleware('permission:classrooms.view');
         Route::get('/{classroomId}/students/{studentId}', [ClassroomController::class, 'getStudentDetails'])->middleware('permission:classrooms.view');
-        Route::patch('/{classroomId}/students/{studentId}/contact-book', [ClassroomController::class, 'updateContactBook'])->middleware('permission:classrooms.manage');
+        Route::patch('/{classroomId}/students/{studentId}/contact-book/health', [ClassroomController::class, 'updateHealthInformation'])->middleware('permission:classrooms.manage');
+        Route::patch('/{classroomId}/students/{studentId}/contact-book/study', [ClassroomController::class, 'updateStudyInformation'])->middleware('permission:classrooms.manage');
         Route::post('/{classroomId}/assign-teacher', [ClassroomController::class, 'assignTeacher'])->middleware(['permission:classrooms.manage']);
         Route::get('/{classroomId}/schedules', [ClassroomController::class, 'getClassroomSchedule']);
         Route::get('/{classroomId}/details', [ClassroomController::class, 'getClassroom']);
@@ -64,6 +65,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/{classroomId}/schedules', [LearningScheduleController::class, 'store'])->middleware(['permission:learning_schedules.create']);
         Route::put('/{classroomId}/schedules/{id}', [LearningScheduleController::class, 'update'])->middleware('permission:learning_schedules.update');
         Route::delete('/{classroomId}/schedules/{id}', [LearningScheduleController::class, 'destroy'])->middleware('permission:learning_schedules.delete');
+
+        Route::get('/{classroomId}/students/{studentId}/contact-book', [ContactBookController::class, 'showContactBook'])->middleware('permission:classrooms.view');
     });
 
     Route::get('/teacher/classrooms', [ClassroomController::class, 'getTeacherClassrooms'])->middleware('permission:teachers.view');
