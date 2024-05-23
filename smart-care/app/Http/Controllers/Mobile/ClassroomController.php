@@ -150,56 +150,29 @@ class ClassroomController extends Controller
         return response()->json($classroom->learning_schedules);
     }
 
-    public function getTeacherClassrooms($teacherId)
+    public function getTeacherClassrooms(Request $request)
     {
-        $teacher = Manager::with('classrooms.students')->findOrFail($teacherId);
+        $teacher = Auth::user();
 
-        if (!$teacher->hasRole('teacher')) {
+        if (!$teacher->roles->contains('name', 'teacher')) {
             return response()->json(['message' => 'User is not a teacher'], 400);
         }
 
-        $classrooms = $teacher->classrooms;
+        $classrooms = $teacher->classrooms->map(function ($classroom) {
+            return [
+                'id' => $classroom->id,
+                'name' => $classroom->name,
+                'students' => $classroom->students->map(function ($student) {
+                    return [
+                        'id' => $student->id,
+                        'name' => $student->name,
+                        'nickname' => $student->nickname,
+                        'profile_image' => $student->profile_image,
+                    ];
+                }),
+            ];
+        });
+
         return response()->json($classrooms);
     }
-
-    // public function getTeacherClassrooms()
-    // {
-    //     $teacher = Auth::user();
-
-    //     $teacherRole = Role::findByName('teacher');
-    //     if (!$teacher->roles->contains($teacherRole)) {
-    //         return response()->json(['message' => 'User is not a teacher'], 400);
-    //     }
-
-    //     $classrooms = Classroom::with('students')
-    //         ->whereHas('managers', function ($query) use ($teacher) {
-    //             $query->where('manager_id', $teacher->id);
-    //         })
-    //         ->get();
-
-    //     return response()->json($classrooms);
-    // }
-
-    // public function getTeacherClassrooms()
-    // {
-    //     $teacher = Auth::user();
-
-    //     // Check if the user has the 'teacher' role
-    //     if (!$teacher->hasRole('teacher')) {
-    //         return response()->json(['message' => 'User is not a teacher'], 400);
-    //     }
-
-    //     // Fetch classrooms managed by the teacher
-    //     $classrooms = Classroom::with('students')
-    //         ->whereHas('managers', function ($query) use ($teacher) {
-    //             $query->where('manager_id', $teacher->id);
-    //         })
-    //         ->get();
-
-    //     if ($classrooms->isEmpty()) {
-    //         return response()->json(['message' => 'No classrooms found for this teacher'], 404);
-    //     }
-
-    //     return response()->json($classrooms);
-    // }
 }
