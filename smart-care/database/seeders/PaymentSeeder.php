@@ -2,7 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Manager;
+use App\Models\Payment;
+use App\Models\Student;
 use App\Models\Tuition;
+use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -11,34 +15,39 @@ class PaymentSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    // public function run(): void
-    // {
-    //     $tuitions = Tuition::with('fee')->get(); 
+    public function run(): void
+    {
+        $coordinators = Manager::role('coordinator')->get();
 
-    //     foreach ($tuitions as $tuition) {
-    //         $fullAmount = $tuition->fee->price;
-    //         $paymentStatus = rand(0, 2);  // Randomly decide if the payment is full, partial, or none
+        foreach ($coordinators as $coordinator) {
+            $tuitions = Tuition::where('manager_id', $coordinator->id)
+                ->with('student', 'fee')
+                ->get();
 
-    //         $amountPaid = 0;
-    //         switch ($paymentStatus) {
-    //             case 0:
-    //                 $amountPaid = 0; // Unpaid
-    //                 break;
-    //             case 1:
-    //                 $amountPaid = $fullAmount; // Fully paid
-    //                 break;
-    //             case 2:
-    //                 $amountPaid = rand($fullAmount / 2, $fullAmount - 1); // Partially paid, at least half
-    //                 break;
-    //         }
+            $studentPayments = [];
+            foreach ($tuitions as $tuition) {
+                $studentId = $tuition->student_id;
+                if (!isset($studentPayments[$studentId])) {
+                    $studentPayments[$studentId] = 0;
+                }
+                $studentPayments[$studentId] += $tuition->fee->price ?? 0;
+            }
 
-    //         Payment::create([
-    //             'tuition_id' => $tuition->id,
-    //             'status' => $amountPaid == $fullAmount ? 1 : 0,  // 1 if fully paid, 0 otherwise
-    //             'total_amount' => $amountPaid,
-    //             'date_of_payment' => $amountPaid > 0 ? Carbon::now()->subDays(rand(0, 30)) : null,  // Payment date within the last month if paid
-    //             'tnx_ref' => 'TXN' . str_pad(rand(1, 9999), 4, '0', STR_PAD_LEFT),  // Transaction reference number
-    //         ]);
-    //     }
-    // }
+            foreach ($studentPayments as $studentId => $totalAmount) {
+                $tuitionId = Tuition::where('student_id', $studentId)->first()->id ?? null;
+                if ($tuitionId) {
+                    $payment = Payment::updateOrCreate(
+                        ['tuition_id' => $tuitionId], 
+                        [
+                            'total_amount' => $totalAmount,
+                            'status' => rand(0, 1),
+                            'tnx_ref' => 'TXN' . uniqid(), 
+                            'date_of_payment' => now(), 
+                        ]
+                    );
+                    $payment->save();
+                }
+            }
+        }
+    }
 }

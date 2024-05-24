@@ -34,6 +34,11 @@ class Classroom extends Model
         return $this->hasMany(Camera::class);
     }
 
+    public function images(): HasMany
+    {
+        return $this->hasMany(Image::class);
+    }
+
     public function managers(): BelongsToMany
     {
         return $this->belongsToMany(Manager::class, 'classroom_managers', 'classroom_id', 'manager_id');
