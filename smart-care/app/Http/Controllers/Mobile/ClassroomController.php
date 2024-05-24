@@ -11,7 +11,6 @@ use App\Models\Manager;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Spatie\Permission\Models\Role;
 
 class ClassroomController extends Controller
 {
@@ -62,16 +61,12 @@ class ClassroomController extends Controller
         return new StudentDetailResource($student);
     }
 
-    public function updateContactBook(Request $request, $classroomId, $studentId)
+    public function updateHealthInformation(Request $request, $classroomId, $studentId)
     {
-        $classroom = Classroom::findOrFail($classroomId);
-        
-        if (!$this->authorize('manage', $classroom)) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
+        $classroom = Classroom::with('managers')->findOrFail($classroomId);
+        $this->authorize('manage', $classroom);
         $student = $classroom->students()->where('id', $studentId)->firstOrFail();
-        $contactBook = $student->contact_books()->firstOrCreate(['student_id' => $studentId]);
+        $contactBook = $student->contact_books()->firstOrFail();
 
         $validated = $request->validate([
             'height' => 'required|numeric',
@@ -80,6 +75,25 @@ class ClassroomController extends Controller
             'blood_pressure' => 'required|string',
             'vision_test' => 'required|string',
             'allergies' => 'nullable|string',
+            'comment' => 'nullable|string',
+        ]);
+
+        $contactBook->update($validated);
+
+        return response()->json([
+            'message' => 'Health information updated successfully',
+            'data' => new ContactBookResource($contactBook)
+        ]);
+    }
+
+    public function updateStudyInformation(Request $request, $classroomId, $studentId)
+    {
+        $classroom = Classroom::with('managers')->findOrFail($classroomId);
+        $this->authorize('manage', $classroom);
+        $student = $classroom->students()->where('id', $studentId)->firstOrFail();
+        $contactBook = $student->contact_books()->firstOrFail();
+
+        $validated = $request->validate([
             'total_absences' => 'required|integer',
             'good_behavior_certificates' => 'nullable|array',
             'comment' => 'nullable|string',
@@ -88,7 +102,7 @@ class ClassroomController extends Controller
         $contactBook->update($validated);
 
         return response()->json([
-            'message' => 'Contact book updated successfully',
+            'message' => 'Study information has been successfully updated',
             'data' => new ContactBookResource($contactBook)
         ]);
     }
