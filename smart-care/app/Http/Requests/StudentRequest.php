@@ -32,7 +32,7 @@ class StudentRequest extends FormRequest
             'date_of_birth' => 'required|date|before:today',
             'email' => 'required|email|unique:students,email,' . $studentId,
             'gender' => 'required|boolean',
-            'profile_image' => 'nullable|string|max:255',
+            'profile_image' => 'nullable|image|max:2048',
             'phone_number' => 'required|string|max:20',
             'username' => [
                 'required', 'string', 'max:255',

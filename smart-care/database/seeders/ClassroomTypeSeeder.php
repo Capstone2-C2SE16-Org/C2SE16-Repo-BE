@@ -20,6 +20,11 @@ class ClassroomTypeSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
+                'name' => 'Lớp nhỡ',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
                 'name' => 'Lớp lớn',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),

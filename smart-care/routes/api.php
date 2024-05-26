@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Mobile\AlbumController;
 use App\Http\Controllers\Mobile\ClassroomController;
 use App\Http\Controllers\Mobile\ContactBookController;
 use App\Http\Controllers\Mobile\ImageController;
@@ -70,8 +71,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('/{classroomId}/students/{studentId}/contact-book', [ContactBookController::class, 'showContactBook'])->middleware('permission:classrooms.view');
 
-        Route::post('/{classroom}/images', [ImageController::class, 'store'])->middleware('permission:classrooms.manage');
-        Route::get('/{classroomId}/images', [ClassroomController::class, 'getClassroomImages']);
+        Route::post('/{classroomId}/albums', [AlbumController::class, 'store'])->middleware('permission:classrooms.manage');
+        Route::post('/{classroomId}/albums/{albumId}/images', [ImageController::class, 'store'])->middleware('permission:classrooms.manage');
+        Route::get('/{classroomId}/albums', [AlbumController::class, 'index']);
+        Route::get('/{classroomId}/albums/{albumId}', [AlbumController::class, 'show']);
     });
 
     Route::get('/teacher/classrooms', [ClassroomController::class, 'getTeacherClassrooms'])->middleware('permission:teachers.view');

@@ -34,9 +34,9 @@ class Classroom extends Model
         return $this->hasMany(Camera::class);
     }
 
-    public function images(): HasMany
+    public function albums(): HasMany
     {
-        return $this->hasMany(Image::class);
+        return $this->hasMany(Album::class);
     }
 
     public function managers(): BelongsToMany

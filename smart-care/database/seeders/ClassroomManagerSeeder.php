@@ -13,17 +13,19 @@ class ClassroomManagerSeeder extends Seeder
      */
     public function run(): void
     {
-        $managers = Manager::whereHas('roles', function ($query) {
-            $query->where('name', 'teacher');
-        })->get();
-
+        $teachers = Manager::role('teacher')->get(); 
         $classrooms = Classroom::all();
 
         foreach ($classrooms as $classroom) {
-            $classroom->managers()->detach();
-            $assignedManagers = $managers->random(rand(1, min(3, $managers->count())));
-            foreach ($assignedManagers as $manager) {
-                $classroom->managers()->attach($manager);
+            $classroom->managers()->detach(); 
+        }
+
+        foreach ($teachers as $teacher) {
+            $numberOfClassroomsToAssign = rand(1, 2);
+
+            $assignedClassrooms = $classrooms->random($numberOfClassroomsToAssign);
+            foreach ($assignedClassrooms as $classroom) {
+                $classroom->managers()->attach($teacher); 
             }
         }
     }

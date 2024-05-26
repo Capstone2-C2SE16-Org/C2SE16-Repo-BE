@@ -193,24 +193,4 @@ class ClassroomController extends Controller
 
         return response()->json($classrooms);
     }
-
-    public function getClassroomImages($classroomId)
-    {
-        $user = Auth::user();
-        $classroom = Classroom::with('images')->findOrFail($classroomId);
-
-        if (!$user->classrooms && $user->classroom_id != $classroomId) {
-            return response()->json(['message' => 'Unauthorized - You can only view images from your classroom.'], 403);
-        }
-
-        if ($user->classrooms && !$user->classrooms->contains('id', $classroomId)) {
-            return response()->json(['message' => 'Unauthorized - You do not manage this classroom.'], 403);
-        }
-
-        if ($classroom->images->isEmpty()) {
-            return response()->json(['message' => 'No images found for the associated classroom'], 404);
-        }
-
-        return response()->json($classroom->images);
-    }
 }

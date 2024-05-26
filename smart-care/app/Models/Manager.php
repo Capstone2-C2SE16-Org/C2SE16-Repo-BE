@@ -105,4 +105,9 @@ class Manager extends Authenticatable
     {
         return $this->roles->pluck('name')->contains('student');
     }
+
+    public function isTeacher()
+    {
+        return $this->roles->pluck('name')->contains('teacher');
+    }
 }   

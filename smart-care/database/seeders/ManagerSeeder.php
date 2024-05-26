@@ -138,7 +138,7 @@ class ManagerSeeder extends Seeder
             return;
         }
 
-        foreach (range(1, 10) as $index) {
+        foreach (range(1, 20) as $index) {
             $lastName = $faker->lastName;
             $middleName = $faker->lastName;
             $firstName = $faker->firstName;
