@@ -16,7 +16,7 @@ return new class extends Migration
             $table->boolean('status')->default(0);
             $table->string('tnx_ref');
             $table->integer('total_amount');
-            $table->dateTime('date_of_payment', $precision = 0);
+            $table->dateTime('date_of_payment', $precision = 0)->nullable();
             $table->unsignedBigInteger('tuition_id');
             $table->foreign('tuition_id')->references('id')->on('tuitions')->onDelete('cascade');
             $table->timestamps();

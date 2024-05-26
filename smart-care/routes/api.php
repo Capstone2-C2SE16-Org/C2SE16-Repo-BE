@@ -3,12 +3,14 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Mobile\ClassroomController;
 use App\Http\Controllers\Mobile\ContactBookController;
+use App\Http\Controllers\Mobile\ImageController;
 use App\Http\Controllers\Mobile\LearningScheduleController;
 use App\Http\Controllers\Mobile\MealScheduleController;
 use App\Http\Controllers\Mobile\StudentRequestController;
 use App\Http\Controllers\Web\LocationController;
 use App\Http\Controllers\Web\MealScheduleController as WebMealScheduleController;
 use App\Http\Controllers\Web\StudentController;
+use App\Http\Controllers\Web\TuitionController;
 use App\Http\Resources\ManagerResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -67,6 +69,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{classroomId}/schedules/{id}', [LearningScheduleController::class, 'destroy'])->middleware('permission:learning_schedules.delete');
 
         Route::get('/{classroomId}/students/{studentId}/contact-book', [ContactBookController::class, 'showContactBook'])->middleware('permission:classrooms.view');
+
+        Route::post('/{classroom}/images', [ImageController::class, 'store'])->middleware('permission:classrooms.manage');
+        Route::get('/{classroomId}/images', [ClassroomController::class, 'getClassroomImages']);
     });
 
     Route::get('/teacher/classrooms', [ClassroomController::class, 'getTeacherClassrooms'])->middleware('permission:teachers.view');
@@ -85,5 +90,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/provinces', [LocationController::class, 'getProvinces'])->middleware('permission:locations.view');
         Route::get('/districts/{province_id}', [LocationController::class, 'getDistricts'])->middleware('permission:locations.view');
         Route::get('/wards/{district_id}', [LocationController::class, 'getWards'])->middleware('permission:locations.view');
+    });
+
+    Route::prefix('tuitions')->group(function () {
+        Route::get('/', [TuitionController::class, 'index'])->middleware('permission:tuitions.view');
     });
 });

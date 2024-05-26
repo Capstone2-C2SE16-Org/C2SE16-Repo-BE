@@ -87,25 +87,29 @@ class ClassroomController extends Controller
     }
 
     public function updateStudyInformation(Request $request, $classroomId, $studentId)
-    {
-        $classroom = Classroom::with('managers')->findOrFail($classroomId);
-        $this->authorize('manage', $classroom);
-        $student = $classroom->students()->where('id', $studentId)->firstOrFail();
-        $contactBook = $student->contact_books()->firstOrFail();
+{
+    $classroom = Classroom::with('managers')->findOrFail($classroomId);
+    $this->authorize('manage', $classroom);
+    $student = $classroom->students()->where('id', $studentId)->firstOrFail();
+    $contactBook = $student->contact_books()->firstOrFail();
 
-        $validated = $request->validate([
-            'total_absences' => 'required|integer',
-            'good_behavior_certificates' => 'nullable|array',
-            'comment' => 'nullable|string',
-        ]);
+    $validated = $request->validate([
+        'total_absences' => 'required|integer',
+        'good_behavior_certificates' => 'nullable|array',
+        'comment' => 'nullable|string',
+    ]);
 
-        $contactBook->update($validated);
-
-        return response()->json([
-            'message' => 'Study information has been successfully updated',
-            'data' => new ContactBookResource($contactBook)
-        ]);
+    if (array_key_exists('good_behavior_certificates', $validated)) {
+        $validated['good_behavior_certificates'] = json_encode($validated['good_behavior_certificates']);
     }
+
+    $contactBook->update($validated);
+
+    return response()->json([
+        'message' => 'Study information has been successfully updated',
+        'data' => new ContactBookResource($contactBook)
+    ]);
+}
 
     public function assignTeacher(Request $request, $classroomId)
     {
@@ -188,5 +192,25 @@ class ClassroomController extends Controller
         });
 
         return response()->json($classrooms);
+    }
+
+    public function getClassroomImages($classroomId)
+    {
+        $user = Auth::user();
+        $classroom = Classroom::with('images')->findOrFail($classroomId);
+
+        if (!$user->classrooms && $user->classroom_id != $classroomId) {
+            return response()->json(['message' => 'Unauthorized - You can only view images from your classroom.'], 403);
+        }
+
+        if ($user->classrooms && !$user->classrooms->contains('id', $classroomId)) {
+            return response()->json(['message' => 'Unauthorized - You do not manage this classroom.'], 403);
+        }
+
+        if ($classroom->images->isEmpty()) {
+            return response()->json(['message' => 'No images found for the associated classroom'], 404);
+        }
+
+        return response()->json($classroom->images);
     }
 }
