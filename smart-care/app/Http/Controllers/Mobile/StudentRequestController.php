@@ -55,7 +55,6 @@ class StudentRequestController extends Controller
         $validatedData['status'] = false;
 
         $studentRequest = StudentRequest::create($validatedData);
-        $studentRequest = StudentRequest::create($validatedData);
 
         return response()->json($studentRequest, 201);
     }

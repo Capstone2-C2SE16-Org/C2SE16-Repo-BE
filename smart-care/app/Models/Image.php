@@ -11,13 +11,14 @@ class Image extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 
-        'url', 
-        'date_upload'
+        'name',
+        'url',  
+        'date_upload', 
+        'album_id', 
     ];
 
-    public function classroom(): BelongsTo
+    public function album(): BelongsTo
     {
-        return $this->belongsTo(Classroom::class);
+        return $this->belongsTo(Album::class);
     }
 }

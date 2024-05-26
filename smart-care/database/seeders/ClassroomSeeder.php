@@ -17,7 +17,7 @@ class ClassroomSeeder extends Seeder
         $classroomTypes = ClassroomType::all();
 
         foreach ($classroomTypes as $type) {
-            for ($i = 1; $i <= 5; $i++) {
+            for ($i = 1; $i <= 3; $i++) {
                 Classroom::create([
                     'name' => "{$type->name} {$i}",
                     'classroom_type_id' => $type->id,

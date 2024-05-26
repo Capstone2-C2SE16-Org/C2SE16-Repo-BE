@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Parents;
 use App\Models\Student;
 use App\Http\Requests\StudentRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
@@ -34,7 +38,15 @@ class StudentController extends Controller
      */
     public function store(StudentRequest $request)
     {
-        $student = Student::create($request->validated());
+        $data = $request->validated();
+
+        if ($request->hasFile('profile_image')) {
+            $path = $request->file('profile_image')->store('profile_images', 'public');
+            $profileImage = Storage::url($path);
+            $data['profile_image'] = $profileImage;
+        }
+
+        $student = Student::create($data);
 
         $parent = new Parents([
             'name' => $request->input('parent_name'),
@@ -53,7 +65,19 @@ class StudentController extends Controller
     public function update(StudentRequest $request, $id)
     {
         $student = Student::findOrFail($id);
-        $student->update($request->validated());
+
+        $data = $request->validated();
+
+        if ($request->hasFile('profile_image')) {
+            if ($student->profile_image) {
+                Storage::disk('public')->delete($student->profile_image);
+            }
+            $path = $request->file('profile_image')->store('profile_images', 'public');
+            $profileImage = Storage::url($path);
+            $data['profile_image'] = $profileImage;
+        }
+
+        $student->update($data);
 
         if ($request->has(['parent_name', 'parent_date_of_birth', 'parent_gender'])) {
             $parent = $student->parent ?? new Parents(['student_id' => $student->id]);
