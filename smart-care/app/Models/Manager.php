@@ -110,4 +110,9 @@ class Manager extends Authenticatable
     {
         return $this->roles->pluck('name')->contains('teacher');
     }
+
+    public function getFullAddressAttribute()
+    {
+        return $this->address . ', ' . $this->ward->name . ', ' . $this->district->name . ', ' . $this->province->name;
+    }
 }   

@@ -105,7 +105,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/', [ManagerController::class, 'store'])->middleware('permission:managers.create');
         Route::get('/', [ManagerController::class, 'index'])->middleware('permission:managers.view');
         Route::get('/{id}', [ManagerController::class, 'show'])->middleware('permission:managers.view');
-        Route::put('/{id}', [ManagerController::class, 'update'])->middleware('permission:managers.update');
+        Route::post('/{id}', [ManagerController::class, 'update'])->middleware('permission:managers.update');
         Route::delete('/{id}', [ManagerController::class, 'destroy'])->middleware('permission:managers.delete');
     });
 });

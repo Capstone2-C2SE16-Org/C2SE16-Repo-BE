@@ -29,18 +29,19 @@ class ManagerRequest extends FormRequest
             'name' => 'required|string|max:1000',
             'address' => 'required|string|max:1000',
             'date_of_birth' => ['required', 'date', 'before_or_equal:today'],
-            'email' => 'required|email',
-            'gender' => 'required',
-            'profile_image' => 'nullable|string',
+            'email' => ['required', 'email', Rule::unique('managers')->ignore($managerId)],
+            'gender' => 'required|boolean', 
+            'profile_image' => 'nullable|image|max:2048',
             'phone_number' => 'required|string|max:100',
             'username' => [
-                'required',
-                Rule::unique('managers', 'username')->ignore($managerId)
+                'required', 'string', Rule::unique('managers')->ignore($managerId)
             ],
             'ward_id' => 'required|exists:wards,id',
             'district_id' => 'required|exists:districts,id',
             'province_id' => 'required|exists:provinces,id',
             'password' => 'required|string|min:6',
+            'roles' => 'required|array', 
+            'roles.*' => 'exists:roles,id' 
         ];
     }
     protected function prepareForValidation()

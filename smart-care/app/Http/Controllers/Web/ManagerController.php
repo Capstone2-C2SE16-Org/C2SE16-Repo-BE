@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ManagerRequest;
 use App\Models\Manager;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ManagerController extends Controller
 {
@@ -25,30 +26,57 @@ class ManagerController extends Controller
 
     public function store(ManagerRequest $request)
     {
-        $validatedData = $request->validated();
-        $manager = Manager::create($validatedData);
+        $data = $request->validated();
 
-        if (isset($validatedData['roles'])) {
-            $manager->roles()->attach($validatedData['roles']);  
+        if ($request->hasFile('profile_image')) {
+            $path = $request->file('profile_image')->store('profile_images', 'public');
+            $profileImage = Storage::url($path);
+            $data['profile_image'] = $profileImage;
         }
 
-        return response()->json(['manager' => $manager->load('roles')], 201);
+        $manager = Manager::create($data);
+
+        if (!empty($data['roles'])) {
+            $manager->roles()->sync($data['roles']);
+        }
+
+        $manager->load('roles');
+        $manager->address = $manager->getFullAddressAttribute();
+        $roles = $manager->roles->pluck('name');
+
+        return response()->json([
+            'message' => 'Manager successfully created.',
+            'manager' => $manager,
+            'roles' => $roles,
+        ], 201);
     }
 
     public function update(ManagerRequest $request, $id)
     {
-        $managers = Manager::findOrFail($id);
+        $manager = Manager::findOrFail($id);  
 
-        $validatedData = $request->validated();
+        $data = $request->validated(); 
 
-        $managers->update($validatedData);
-
-        if (isset($validatedData['roles'])) {
-            $managers->roles()->sync($validatedData['roles']);
+        if ($request->hasFile('profile_image')) {
+            if ($manager->profile_image && Storage::disk('public')->exists($manager->profile_image)) {
+                Storage::disk('public')->delete($manager->profile_image);
+            }
+            $path = $request->file('profile_image')->store('profile_images', 'public');
+            $data['profile_image'] = Storage::url($path);
         }
-        $managers->load('roles');
-
-        return response()->json(['manager' => $managers]);
+    
+        $manager->update($data);
+    
+        if (isset($data['roles'])) {
+            $manager->roles()->sync($data['roles']);
+        }
+    
+        $manager->load('roles');
+    
+        $manager->address = $manager->getFullAddressAttribute();
+        $manager->save();
+    
+        return response()->json(['manager' => $manager]);
     }
 
     public function destroy($id)
