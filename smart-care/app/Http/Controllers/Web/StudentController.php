@@ -7,9 +7,7 @@ use App\Models\Parents;
 use App\Models\Student;
 use App\Http\Requests\StudentRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
@@ -77,7 +75,6 @@ class StudentController extends Controller
         }
 
         $student->update($data);
-
 
         if ($request->has(['parent_name', 'parent_date_of_birth', 'parent_gender'])) {
             $parent = $student->parent ?? new Parents(['student_id' => $student->id]);

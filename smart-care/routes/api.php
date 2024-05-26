@@ -87,7 +87,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [StudentController::class, 'index'])->middleware('permission:students.list');
         Route::post('/', [StudentController::class, 'store'])->middleware('permission:students.create');
         Route::get('/{id}', [StudentController::class, 'show'])->middleware('permission:students.view');
-        Route::put('/{id}', [StudentController::class, 'update'])->middleware('permission:students.update');
+        Route::post('/{id}', [StudentController::class, 'update'])->middleware('permission:students.update');
         Route::delete('/{id}', [StudentController::class, 'destroy'])->middleware('permission:students.delete');
     });
 
