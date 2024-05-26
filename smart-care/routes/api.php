@@ -9,10 +9,12 @@ use App\Http\Controllers\Mobile\LearningScheduleController;
 use App\Http\Controllers\Mobile\MealScheduleController;
 use App\Http\Controllers\Mobile\StudentRequestController;
 use App\Http\Controllers\Web\LocationController;
+use App\Http\Controllers\Web\ManagerController;
 use App\Http\Controllers\Web\MealScheduleController as WebMealScheduleController;
 use App\Http\Controllers\Web\StudentController;
 use App\Http\Controllers\Web\TuitionController;
 use App\Http\Resources\ManagerResource;
+use App\Models\Manager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -97,5 +99,13 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('tuitions')->group(function () {
         Route::get('/', [TuitionController::class, 'index'])->middleware('permission:tuitions.view');
+    });
+
+    Route::prefix('managers')->group(function () {
+        Route::post('/', [ManagerController::class, 'store'])->middleware('permission:managers.create');
+        Route::get('/', [ManagerController::class, 'index'])->middleware('permission:managers.view');
+        Route::get('/{id}', [ManagerController::class, 'show'])->middleware('permission:managers.view');
+        Route::put('/{id}', [ManagerController::class, 'update'])->middleware('permission:managers.update');
+        Route::delete('/{id}', [ManagerController::class, 'destroy'])->middleware('permission:managers.delete');
     });
 });

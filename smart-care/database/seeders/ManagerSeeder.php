@@ -90,8 +90,6 @@ class ManagerSeeder extends Seeder
         $admin->givePermissionTo($permissions);
 
         $teacher_permissions = [
-            'managers.list',
-            'managers.view',
             'student_requests.view',
             'student_requests.update',
             'student_requests.delete',
@@ -112,8 +110,6 @@ class ManagerSeeder extends Seeder
         $teacher_role->givePermissionTo($teacher_permissions);
 
         $coordinator_permissions = [
-            'managers.list',
-            'managers.view',
             'meal_schedules.view',
             'meal_schedules.create',
             'meal_schedules.update',

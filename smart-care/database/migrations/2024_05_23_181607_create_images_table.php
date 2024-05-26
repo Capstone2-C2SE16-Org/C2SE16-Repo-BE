@@ -13,9 +13,7 @@ return new class extends Migration
     {
         Schema::create('images', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->string('url');
-            $table->date('date_upload');
             $table->unsignedBigInteger('album_id');
             $table->foreign('album_id')->references('id')->on('albums')->onDelete('cascade');
             $table->timestamps();

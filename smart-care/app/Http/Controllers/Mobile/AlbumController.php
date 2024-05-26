@@ -9,15 +9,24 @@ use App\Models\Manager;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class AlbumController extends Controller
 {
     public function store(Request $request, $classroomId)
     {
         $this->authorize('manage', Classroom::find($classroomId));
+        
         $album = new Album();
         $album->name = $request->name;
+        $album->date_upload = $request->date_upload;
         $album->classroom_id = $classroomId;
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('album_covers', 'public');
+            $album->image = Storage::url($path);
+        }
+
         $album->save();
 
         return response()->json($album, 201);

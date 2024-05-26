@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Mobile;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreStudentRequest;
+use App\Models\Classroom;
 use App\Models\Manager;
+use App\Models\Student;
 use App\Models\StudentRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,29 +35,28 @@ class StudentRequestController extends Controller
     public function store(StoreStudentRequest $request)
     {
         $validatedData = $request->validated();
-        $validatedData['student_id'] = Auth::id();
-
-        $teacher = Manager::role('teacher')->inRandomOrder()->first();
-
-        if (!$teacher) {
+        $studentId = Auth::id();
+    
+        $student = Student::with('classroom.managers')->find($studentId);
+    
+        if (!$student || !$student->classroom) {
+            return response()->json(['message' => 'No classroom found for the student.'], 422);
+        }
+    
+        $manager = $student->classroom->managers->first(function ($manager) {
+            return $manager->roles->contains('name', 'teacher');
+        });
+    
+        if (!$manager) {
             return response()->json(['message' => 'No teacher available to assign request.'], 422);
         }
-
-        $validatedData['manager_id'] = $teacher->id;
-        $validatedData['status'] = false;
-        $validatedData['student_id'] = Auth::id();
-
-        $teacher = Manager::role('teacher')->inRandomOrder()->first();
-
-        if (!$teacher) {
-            return response()->json(['message' => 'No teacher available to assign request.'], 422);
-        }
-
-        $validatedData['manager_id'] = $teacher->id;
-        $validatedData['status'] = false;
-
+    
+        $validatedData['manager_id'] = $manager->id; 
+        $validatedData['student_id'] = $studentId;
+        $validatedData['status'] = false; 
+    
         $studentRequest = StudentRequest::create($validatedData);
-
+    
         return response()->json($studentRequest, 201);
     }
 
