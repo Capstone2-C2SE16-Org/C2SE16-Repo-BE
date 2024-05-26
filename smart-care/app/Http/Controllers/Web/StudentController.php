@@ -5,11 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Parents;
 use App\Models\Student;
-// use App\Models\StudentRequest;
 use App\Http\Requests\StudentRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
@@ -48,6 +44,9 @@ class StudentController extends Controller
         ]);
         $parent->save();
 
+        $student->address = $student->getFullAddressAttribute();
+        $student->save();
+
         return response()->json(['student' => $student, 'parent' => $parent], 201);
     }
 
@@ -56,7 +55,7 @@ class StudentController extends Controller
         $student = Student::findOrFail($id);
         $student->update($request->validated());
 
-        if ($request->has('parent_name')) {
+        if ($request->has(['parent_name', 'parent_date_of_birth', 'parent_gender'])) {
             $parent = $student->parent ?? new Parents(['student_id' => $student->id]);
             $parent->fill([
                 'name' => $request->parent_name,
@@ -65,23 +64,22 @@ class StudentController extends Controller
             ])->save();
         }
 
+        $student->address = $student->getFullAddressAttribute();
+        $student->save();
+
         return response()->json(['student' => $student, 'parent' => $student->parent]);
     }
 
     public function destroy($id)
     {
-        // Retrieve the student by id, or fail with a 404 error
         $student = Student::findOrFail($id);
 
-        // Optional: handle related data, such as deleting a parent record
         if ($student->parent) {
             $student->parent->delete();
         }
 
-        // Delete the student
         $student->delete();
 
-        // Return a 204 No Content response to signify successful deletion
-        return response()->json(null, 204);
+        return response()->json(['message' => 'Student and associated parent record deleted successfully.'], 200);
     }
 }

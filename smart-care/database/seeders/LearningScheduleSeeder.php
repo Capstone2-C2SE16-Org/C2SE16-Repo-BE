@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Faker\Factory as Faker;
 use Illuminate\Database\Seeder;
 
+
 class LearningScheduleSeeder extends Seeder
 {
     /**
@@ -37,11 +38,11 @@ class LearningScheduleSeeder extends Seeder
         $classrooms = Classroom::all();
 
         foreach ($classrooms as $classroom) {
-            LearningSchedule::where('name', 'LIKE', '%'.$classroom->name.'%')
+            LearningSchedule::where('name', 'LIKE', '%' . $classroom->name . '%')
                 ->whereBetween('date', [$startOfWeek, $startOfWeek->copy()->endOfWeek()])
                 ->delete();
 
-            for ($dayIndex = 0; $dayIndex < 6; $dayIndex++) {
+            for ($dayIndex = 0; $dayIndex < 5; $dayIndex++) {
                 $date = $startOfWeek->copy()->addDays($dayIndex);
 
                 $scheduleName = "Lịch học {$classroom->name}";

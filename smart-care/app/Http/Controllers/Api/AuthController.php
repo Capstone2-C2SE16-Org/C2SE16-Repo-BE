@@ -25,7 +25,11 @@ class AuthController extends Controller
             Helper::sendError('Username or Password is woring !!!');
         }
 
-        return new ManagerResource(auth()->user());
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Login successful!',
+            'user' => new ManagerResource(auth()->user()),
+        ]);
     }
 
     public function studentLogin(LoginRequest $request)
@@ -113,7 +117,7 @@ class AuthController extends Controller
         if (!$resetData) {
             return view('404');
         }
-    
+
         return view('resetPassword', ['resetData' => $resetData]);
     }
 
@@ -124,27 +128,27 @@ class AuthController extends Controller
             'email' => 'required|email',
             'password' => 'required|string|min:6|confirmed',
         ]);
-    
+
         $resetData = PasswordResetToken::where('email', $request->email)
-                        ->where('token', $request->token)
-                        ->first();
-    
+            ->where('token', $request->token)
+            ->first();
+
         if (!$resetData) {
             return response()->json(['success' => false, 'msg' => 'Invalid token or email.']);
         }
-    
+
         if (Carbon::parse($resetData->created_at)->addMinutes(60)->isPast()) {
             return response()->json(['success' => false, 'msg' => 'The token has expired.']);
         }
-    
+
         $user = Manager::where('email', $resetData->email)->first() ?? Student::where('email', $resetData->email)->first();
-    
+
         if ($user) {
             $user->password = Hash::make($request->password);
             $user->save();
-            
+
             PasswordResetToken::where('email', $user->email)->delete();
-    
+
             return response()->json(['success' => true, 'msg' => 'Your password has been reset successfully.']);
         } else {
             return response()->json(['success' => false, 'msg' => 'User not found.']);

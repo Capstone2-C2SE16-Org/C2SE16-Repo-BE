@@ -37,6 +37,9 @@ class ManagerRequest extends FormRequest
                 'required',
                 Rule::unique('managers', 'username')->ignore($managerId)
             ],
+            'ward_id' => 'required|exists:wards,id',
+            'district_id' => 'required|exists:districts,id',
+            'province_id' => 'required|exists:provinces,id',
             'password' => 'required|string|min:6',
         ];
     }

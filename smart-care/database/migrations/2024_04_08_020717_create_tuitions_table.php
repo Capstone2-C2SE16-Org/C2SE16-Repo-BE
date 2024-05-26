@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tuitions', function (Blueprint $table) {
             $table->id();
             $table->boolean('status')->default(0);
-            $table->dateTime('date_of_payment', $precision = 0);
+            $table->dateTime('date_of_payment')->nullable(); 
             $table->boolean('is_paid')->default(0);
             $table->unsignedBigInteger('manager_id');
             $table->foreign('manager_id')->references('id')->on('managers')->onDelete('cascade');

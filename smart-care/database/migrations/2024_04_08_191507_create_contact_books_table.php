@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id();
             $table->float('height', 8, 2);
             $table->float('weight', 8, 2);
+            $table->string('blood_group');
             $table->string('blood_pressure');
             $table->string('vision_test');
+            $table->string('allergies');
             $table->integer('total_absences');
-            $table->float('transcript', 8, 2);
+            $table->json('good_behavior_certificates')->nullable();
             $table->text('comment');
             $table->unsignedBigInteger('student_id');
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');

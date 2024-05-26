@@ -2,12 +2,16 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Mobile\ClassroomController;
+use App\Http\Controllers\Mobile\ContactBookController;
 use App\Http\Controllers\Mobile\LearningScheduleController;
 use App\Http\Controllers\Mobile\MealScheduleController;
 use App\Http\Controllers\Mobile\StudentRequestController;
+use App\Http\Controllers\Web\LocationController;
 use App\Http\Controllers\Web\ManagerController;
+use App\Http\Controllers\Web\MealScheduleController as WebMealScheduleController;
 use App\Http\Controllers\Web\StudentController;
 use App\Http\Resources\ManagerResource;
+use App\Models\Manager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,14 +32,17 @@ Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logo
 Route::post('forget-password', [AuthController::class, 'forgetPassword']);
 
 Route::middleware('auth:sanctum')->group(function () {
-    
-    
     Route::get('/manager', function (Request $request) {
         return new ManagerResource($request->user());
     });
 
-    Route::get('/meal-schedules/current', [MealScheduleController::class, 'getCurrentWeek']);
-    Route::get('/meal-schedules/next', [MealScheduleController::class, 'getNextWeek']);
+    Route::prefix('meal-schedules')->group(function () {
+        Route::get('/current', [MealScheduleController::class, 'getCurrentWeek']);
+        Route::get('/', [WebMealScheduleController::class, 'index'])->middleware('permission:meal_schedules.view');
+        Route::post('/', [WebMealScheduleController::class, 'store'])->middleware('permission:meal_schedules.create');
+        Route::put('/{id}', [WebMealScheduleController::class, 'update'])->middleware('permission:meal_schedules.update');
+        Route::delete('/{id}', [WebMealScheduleController::class, 'destroy'])->middleware('permission:meal_schedules.delete');
+    });
 
     Route::prefix('student-requests')->group(function () {
         Route::post('/', [StudentRequestController::class, 'store']);
@@ -46,8 +53,11 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('classrooms')->group(function () {
-        Route::get('/', [ClassroomController::class, 'index']);
-        Route::get('/{classroomId}', [ClassroomController::class, 'show']);
+        Route::get('/', [ClassroomController::class, 'index'])->middleware('permission:classrooms.view');;
+        Route::get('/{classroomId}', [ClassroomController::class, 'show'])->middleware('permission:classrooms.view');;
+        Route::get('/{classroomId}/students', [ClassroomController::class, 'listStudents'])->middleware('permission:classrooms.view');
+        Route::get('/{classroomId}/students/{studentId}', [ClassroomController::class, 'getStudentDetails'])->middleware('permission:classrooms.view');
+        Route::patch('/{classroomId}/students/{studentId}/contact-book', [ClassroomController::class, 'updateContactBook'])->middleware('permission:classrooms.manage');
         Route::post('/{classroomId}/assign-teacher', [ClassroomController::class, 'assignTeacher'])->middleware(['permission:classrooms.manage']);
         Route::get('/{classroomId}/schedules', [ClassroomController::class, 'getClassroomSchedule']);
         Route::get('/{classroomId}/details', [ClassroomController::class, 'getClassroom']);
@@ -58,6 +68,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{classroomId}/schedules/{id}', [LearningScheduleController::class, 'destroy'])->middleware('permission:learning_schedules.delete');
     });
 
+    Route::get('/contact-books/my', [ContactBookController::class, 'myContactBook']);
+
     Route::prefix('students')->group(function () {
         Route::get('/', [StudentController::class, 'index'])->middleware('permission:students.list');
         Route::post('/', [StudentController::class, 'store'])->middleware('permission:students.create');
@@ -66,9 +78,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [StudentController::class, 'destroy'])->middleware('permission:students.delete');
     });
 
+    Route::prefix('location')->group(function () {
+        Route::get('/provinces', [LocationController::class, 'getProvinces'])->middleware('permission:locations.view');
+        Route::get('/districts/{province_id}', [LocationController::class, 'getDistricts'])->middleware('permission:locations.view');
+        Route::get('/wards/{district_id}', [LocationController::class, 'getWards'])->middleware('permission:locations.view');
+    });
+    
+    Route::get('/manager-roles', [ManagerController::class, 'listRoles'])->middleware('permission:managers.roles.view');
     Route::prefix('managers')->group(function () {
-        Route::get('/', [ManagerController::class, 'index'])->middleware('permission:managers.list');
-        Route::post('/', [ManagerController::class, 'store'])->middleware('permission:managers.create');
+        Route::post('/', [ManagerController::class, 'store']);
+        Route::get('/', [ManagerController::class, 'index'])->middleware('permission:managers.view');
         Route::get('/{id}', [ManagerController::class, 'show'])->middleware('permission:managers.view');
         Route::put('/{id}', [ManagerController::class, 'update'])->middleware('permission:managers.update');
         Route::delete('/{id}', [ManagerController::class, 'destroy'])->middleware('permission:managers.delete');

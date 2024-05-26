@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Manager;
+use App\Models\Ward;
 use Illuminate\Support\Str;
 use Faker\Factory as Faker;
 use Spatie\Permission\Models\Permission;
@@ -18,62 +19,55 @@ class ManagerSeeder extends Seeder
 
     public function run(): void
     {
-        $manager_list = Permission::create(['name' => 'managers.list']);
-        $manager_view = Permission::create(['name' => 'managers.view']);
-        $manager_create = Permission::create(['name' => 'managers.create']);
-        $manager_update = Permission::create(['name' => 'managers.update']);
-        $manager_delete = Permission::create(['name' => 'managers.delete']);
+        $permissions = [
+            'managers.list',
+            'managers.view',
+            'managers.create',
+            'managers.update',
+            'managers.delete',
+            'meal_schedules.view',
+            'meal_schedules.create',
+            'meal_schedules.update',
+            'meal_schedules.delete',
+            'student_requests.create',
+            'student_requests.view',
+            'student_requests.update',
+            'student_requests.delete',
+            'classrooms.view',
+            'classrooms.manage',
+            'learning_schedules.view',
+            'learning_schedules.create',
+            'learning_schedules.update',
+            'learning_schedules.delete',
+            'contact_books.view',
+            'contact_books.create',
+            'contact_books.update',
+            'contact_books.delete',
+            'tuitions.view',
+            'tuitions.create',
+            'tuitions.update',
+            'tuitions.delete',
+            'students.list',
+            'students.view',
+            'students.create',
+            'students.update',
+            'students.delete',
+            'locations.view'
+        ];
 
-        $meal_schedule_view = Permission::create(['name' => 'meal_schedules.view']);
+        foreach ($permissions as $permission) {
+            Permission::firstOrCreate(['name' => $permission]);
+        }
 
-        $student_request_create = Permission::create(['name' => 'student_requests.create']);
-        $student_request_view = Permission::create(['name' => 'student_requests.view']);
-        $student_request_update = Permission::create(['name' => 'student_requests.update']);
-        $student_request_delete = Permission::create(['name' => 'student_requests.delete']);
+        $admin_role = Role::firstOrCreate(['name' => 'admin']);
+        $admin_role->givePermissionTo($permissions);
 
-        $classroom_view = Permission::create(['name' => 'classrooms.view']);
-        $classroom_manage = Permission::create(['name' => 'classrooms.manage']);
-
-        $learning_schedule_view = Permission::create(['name' => 'learning_schedules.view']);
-        $learning_schedule_create = Permission::create(['name' => 'learning_schedules.create']);
-        $learning_schedule_update = Permission::create(['name' => 'learning_schedules.update']);
-        $learning_schedule_delete = Permission::create(['name' => 'learning_schedules.delete']);
-
-        $student_list = Permission::create(['name' => 'students.list']);
-        $student_view = Permission::create(['name' => 'students.view']);
-        $student_create = Permission::create(['name' => 'students.create']);
-        $student_update = Permission::create(['name' => 'students.update']);
-        $student_delete = Permission::create(['name' => 'students.delete']);
-
-        $admin_role = Role::create(['name' => 'admin']);
-        $admin_role->givePermissionTo([
-            $manager_create,
-            $manager_list,
-            $manager_update,
-            $manager_view,
-            $manager_delete,
-            $meal_schedule_view,
-            $student_request_view,
-            $student_request_update,
-            $student_request_delete,
-            $classroom_view,
-            $classroom_manage,
-            $learning_schedule_view,
-            $learning_schedule_create,
-            $learning_schedule_update,
-            $learning_schedule_delete,
-            $student_list,
-            $student_view,
-            $student_create,
-            $student_update,
-            $student_delete,
-        ]);
-
-        $admin = Manager::create([
+        $admin = Manager::firstOrCreate([
+            'email' => 'capstone2c2se16@gmail.com'
+        ], [
             'name' => 'Admin',
             'address' => 'Da Nang',
             'date_of_birth' => '2000-01-01',
-            'email' => 'capstone2c2se16@gmail.com',
             'email_verified_at' => now(),
             'gender' => '1',
             'profile_image' => 'https://png.pngtree.com/png-vector/20220810/ourlarge/pngtree-client-icon-manager-avatar-chief-vector-png-image_19468048.jpg',
@@ -82,74 +76,91 @@ class ManagerSeeder extends Seeder
             'password' => Hash::make('password'),
             'is_enable' => 1,
             'remember_token' => Str::random(10),
+            'ward_id' => 6389,
+            'district_id' => 358,
+            'province_id' => 32
         ]);
 
         $admin->syncRoles($admin_role);
-        $admin->givePermissionTo([
-            $manager_create,
-            $manager_list,
-            $manager_update,
-            $manager_view,
-            $manager_delete,
-            $meal_schedule_view,
-            $student_request_view,
-            $student_request_update,
-            $student_request_delete,
-            $classroom_view,
-            $classroom_manage,
-            $learning_schedule_view,
-            $learning_schedule_create,
-            $learning_schedule_update,
-            $learning_schedule_delete,
-            $student_list,
-            $student_view,
-            $student_create,
-            $student_update,
-            $student_delete,
-        ]);
+        $admin->givePermissionTo($permissions);
 
-        $teacher_role = Role::create(['name' => 'teacher']);
-        $teacher_role->givePermissionTo([
-            $manager_list,
-            $manager_view,
-            $meal_schedule_view,
-            $student_request_view,
-            $student_request_update,
-            $classroom_view,
-            $learning_schedule_view,
-            $learning_schedule_create,
-            $learning_schedule_update,
-            $learning_schedule_delete,
-            $student_list,
-            $student_view,
-        ]);
+        $teacher_permissions = [
+            'managers.list',
+            'managers.view',
+            'student_requests.view',
+            'student_requests.update',
+            'classrooms.view',
+            'classrooms.manage',
+            'learning_schedules.view',
+            'learning_schedules.create',
+            'learning_schedules.update',
+            'learning_schedules.delete',
+            'contact_books.view',
+            'contact_books.create',
+            'contact_books.update',
+            'contact_books.delete'
+        ];
 
-        $coordinator_role = Role::create(['name' => 'coordinator']);
-        $coordinator_role->givePermissionTo([
-            $manager_list,
-            $manager_view,
-            $meal_schedule_view,
-        ]);
+        $teacher_role = Role::firstOrCreate(['name' => 'teacher']);
+        $teacher_role->givePermissionTo($teacher_permissions);
+
+        $coordinator_permissions = [
+            'managers.list',
+            'managers.view',
+            'meal_schedules.view',
+            'meal_schedules.create',
+            'meal_schedules.update',
+            'meal_schedules.delete',
+            'tuitions.create',
+            'tuitions.view',
+            'tuitions.update',
+            'tuitions.delete'
+        ];
+
+        $coordinator_role = Role::firstOrCreate(['name' => 'coordinator']);
+        $coordinator_role->givePermissionTo($coordinator_permissions);
 
         $faker = Faker::create('vi_VN');
 
+        if (Ward::count() == 0) {
+            $this->command->info('No wards found. Please run the import command: php artisan vietnamzone:import');
+            return;
+        }
+
         foreach (range(1, 10) as $index) {
-            $name = $faker->name;
-            $asciiName = $this->removeAccents($name);
+            $lastName = $faker->lastName;
+            $middleName = $faker->lastName;
+            $firstName = $faker->firstName;
+            $fullName = "$lastName $middleName $firstName";
+
+            $asciiLastName = Str::slug($lastName, '');
+            $asciiMiddleName = Str::slug($middleName, '');
+            $asciiFirstName = Str::slug($firstName, '');
+            $email = strtolower($asciiLastName . $asciiMiddleName . $asciiFirstName) . '@gmail.com';
+            $username = strtolower($asciiLastName . $asciiMiddleName . $asciiFirstName);
+
+            $ward = Ward::inRandomOrder()->first();
+            $district = $ward->district;
+            $province = $district->province;
+
+            $address = $faker->streetAddress . ', ' . $ward->name . ', ' . $district->name . ', ' . $province->name;
 
             $manager = Manager::create([
-                'name' => $name,
-                'address' => $faker->address,
+                'name' => $fullName,
+                'address' => $address,
                 'date_of_birth' => $faker->dateTimeBetween('-50 years', '-18 years')->format('Y-m-d'),
-                'email' => strtolower(str_replace(' ', '', $asciiName)) . '@gmail.com',
+                'email' => $email,
                 'email_verified_at' => now(),
                 'gender' => rand(0, 1),
                 'profile_image' => "https://picsum.photos/200/200?random=" . mt_rand(1000, 9999),
                 'phone_number' => $faker->phoneNumber,
-                'username' => strtolower(str_replace(' ', '', $asciiName)),
+                'username' => $username,
                 'password' => Hash::make('password'),
                 'is_enable' => true,
                 'remember_token' => Str::random(10),
+                'ward_id' => $ward->id,
+                'district_id' => $district->id,
+                'province_id' => $province->id,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -158,32 +169,10 @@ class ManagerSeeder extends Seeder
             $manager->assignRole($assignedRole);
 
             if ($assignedRole->name === 'teacher') {
-                $manager->givePermissionTo([
-                    $manager_list,
-                    $manager_view,
-                    $meal_schedule_view,
-                    $student_request_view,
-                    $student_request_update,
-                    $classroom_view,
-                    $learning_schedule_view,
-                    $learning_schedule_create,
-                    $learning_schedule_update,
-                    $learning_schedule_delete,
-                    $student_list,
-                    $student_view,
-                ]);
+                $manager->givePermissionTo($teacher_permissions);
             } else if ($assignedRole->name === 'coordinator') {
-                $manager->givePermissionTo([
-                    $manager_list,
-                    $manager_view,
-                    $meal_schedule_view,
-                ]);
+                $manager->givePermissionTo($coordinator_permissions);
             }
         }
-    }
-
-    private function removeAccents($string)
-    {
-        return Str::slug($string, '');
     }
 }

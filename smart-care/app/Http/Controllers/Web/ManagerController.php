@@ -15,6 +15,13 @@ class ManagerController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+    public function listRoles()
+    {
+        $roles = \App\Models\Role::all();  // Fetch all roles
+        return response()->json(['roles' => $roles]);
+    }
+    
     public function index()
     {
         $managers = Manager::with('roles')->paginate(10);

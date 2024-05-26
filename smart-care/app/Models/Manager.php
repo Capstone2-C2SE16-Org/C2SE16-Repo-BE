@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -30,7 +31,10 @@ class Manager extends Authenticatable
         'phone_number',
         'username',
         'password',
-        'is_enable'
+        'is_enable',
+        'ward_id',
+        'district_id',
+        'province_id'
     ];
 
     /**
@@ -74,12 +78,27 @@ class Manager extends Authenticatable
 
     public function classrooms(): BelongsToMany
     {
-        return $this->belongsToMany(Classroom::class);
+        return $this->belongsToMany(Classroom::class, 'classroom_managers', 'manager_id', 'classroom_id');
     }
 
     public function announcements(): HasMany
     {
         return $this->hasMany(Announcement::class);
+    }
+
+    public function ward(): BelongsTo
+    {
+        return $this->belongsTo(Ward::class);
+    }
+
+    public function district(): BelongsTo
+    {
+        return $this->belongsTo(District::class);
+    }
+
+    public function province(): BelongsTo
+    {
+        return $this->belongsTo(Province::class);
     }
 
     public function isStudent()
