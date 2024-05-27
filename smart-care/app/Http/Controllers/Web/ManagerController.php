@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ManagerRequest;
+use App\Models\District;
 use App\Models\Manager;
+use App\Models\Province;
+use App\Models\Ward;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -41,7 +44,10 @@ class ManagerController extends Controller
         }
 
         $manager->load('roles');
+
         $manager->address = $manager->getFullAddressAttribute();
+        $manager->save();
+
         $roles = $manager->roles->pluck('name');
 
         return response()->json([
@@ -53,9 +59,9 @@ class ManagerController extends Controller
 
     public function update(ManagerRequest $request, $id)
     {
-        $manager = Manager::findOrFail($id);  
+        $manager = Manager::findOrFail($id);
 
-        $data = $request->validated(); 
+        $data = $request->validated();
 
         if ($request->hasFile('profile_image')) {
             if ($manager->profile_image && Storage::disk('public')->exists($manager->profile_image)) {
@@ -64,18 +70,34 @@ class ManagerController extends Controller
             $path = $request->file('profile_image')->store('profile_images', 'public');
             $data['profile_image'] = Storage::url($path);
         }
-    
+
+        // Cập nhật các trường về địa chỉ
+        $manager->ward_id = $data['ward_id'];
+        $manager->district_id = $data['district_id'];
+        $manager->province_id = $data['province_id'];
+
+        // Lấy thông tin chi tiết về phường, quận, và tỉnh/thành phố từ database
+        $ward = Ward::find($data['ward_id']);
+        $district = District::find($data['district_id']);
+        $province = Province::find($data['province_id']);
+
+        // Xây dựng chuỗi địa chỉ mới
+        $fullAddress = $data['address'] . ', ' . ($ward ? $ward->name : '') . ', ' . ($district ? $district->name : '') . ', ' . ($province ? $province->name : '');
+        $manager->address = $fullAddress;
+
+        $manager->save(); // Lưu các thay đổi
+
         $manager->update($data);
-    
+
         if (isset($data['roles'])) {
             $manager->roles()->sync($data['roles']);
         }
-    
+
         $manager->load('roles');
-    
-        $manager->address = $manager->getFullAddressAttribute();
-        $manager->save();
-    
+
+        // $manager->address = $manager->getFullAddressAttribute();
+        // $manager->save();
+
         return response()->json(['manager' => $manager]);
     }
 

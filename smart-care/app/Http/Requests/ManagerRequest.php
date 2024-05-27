@@ -39,8 +39,8 @@ class ManagerRequest extends FormRequest
             'ward_id' => 'required|exists:wards,id',
             'district_id' => 'required|exists:districts,id',
             'province_id' => 'required|exists:provinces,id',
-            'password' => 'required|string|min:6',
-            'roles' => 'required|array', 
+            'password' => $managerId ? 'nullable|string|min:8' : 'required|string|min:8',
+            'roles' => $managerId ? 'nullable|array' : 'required|array', 
             'roles.*' => 'exists:roles,id' 
         ];
     }
