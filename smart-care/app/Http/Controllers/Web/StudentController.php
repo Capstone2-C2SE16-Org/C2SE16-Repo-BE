@@ -55,7 +55,6 @@ class StudentController extends Controller
             'student_id' => $student->id
         ]);
         $parent->save();
-
         $student->address = $student->getFullAddressAttribute();
         $student->save();
 
@@ -78,6 +77,7 @@ class StudentController extends Controller
         }
 
         $student->update($data);
+
 
         if ($request->has(['parent_name', 'parent_date_of_birth', 'parent_gender'])) {
             $parent = $student->parent ?? new Parents(['student_id' => $student->id]);

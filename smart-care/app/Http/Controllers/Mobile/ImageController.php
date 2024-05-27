@@ -16,16 +16,13 @@ class ImageController extends Controller
         $this->authorize('manage', $classroom);
 
         $request->validate([
-            'name' => 'required|string|max:255',
             'image' => 'required|image|max:2048',
         ]);
 
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
             $image = new Image();
-            $image->name = $request->name;
             $path = $request->file('image')->store('images', 'public');
             $image->url = Storage::url($path);
-            $image->date_upload = now();
             $image->album_id = $albumId;
             $image->save();
 

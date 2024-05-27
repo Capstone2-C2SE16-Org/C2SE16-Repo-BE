@@ -11,9 +11,7 @@ class Image extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
         'url',  
-        'date_upload', 
         'album_id', 
     ];
 

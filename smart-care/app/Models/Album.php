@@ -13,6 +13,8 @@ class Album extends Model
 
     protected $fillable = [
         'name',
+        'image',
+        'date_upload', 
         'classroom_id', 
     ];
 
