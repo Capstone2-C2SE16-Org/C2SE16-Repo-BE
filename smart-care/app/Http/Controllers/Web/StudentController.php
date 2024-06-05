@@ -77,21 +77,18 @@ class StudentController extends Controller
             $data['profile_image'] = $profileImage;
         }
 
-        // Cập nhật các trường về địa chỉ
         $student->ward_id = $data['ward_id'];
         $student->district_id = $data['district_id'];
         $student->province_id = $data['province_id'];
 
-        // Lấy thông tin chi tiết về phường, quận, và tỉnh/thành phố từ database
         $ward = Ward::find($data['ward_id']);
         $district = District::find($data['district_id']);
         $province = Province::find($data['province_id']);
 
-        // Xây dựng chuỗi địa chỉ mới
         $fullAddress = $data['address'] . ', ' . ($ward ? $ward->name : '') . ', ' . ($district ? $district->name : '') . ', ' . ($province ? $province->name : '');
         $student->address = $fullAddress;
 
-        $student->save(); // Lưu các thay đổi
+        $student->save();
 
         $student->update($data);
 

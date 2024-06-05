@@ -71,21 +71,18 @@ class ManagerController extends Controller
             $data['profile_image'] = Storage::url($path);
         }
 
-        // Cập nhật các trường về địa chỉ
         $manager->ward_id = $data['ward_id'];
         $manager->district_id = $data['district_id'];
         $manager->province_id = $data['province_id'];
 
-        // Lấy thông tin chi tiết về phường, quận, và tỉnh/thành phố từ database
         $ward = Ward::find($data['ward_id']);
         $district = District::find($data['district_id']);
         $province = Province::find($data['province_id']);
 
-        // Xây dựng chuỗi địa chỉ mới
         $fullAddress = $data['address'] . ', ' . ($ward ? $ward->name : '') . ', ' . ($district ? $district->name : '') . ', ' . ($province ? $province->name : '');
         $manager->address = $fullAddress;
 
-        $manager->save(); // Lưu các thay đổi
+        $manager->save(); 
 
         $manager->update($data);
 
