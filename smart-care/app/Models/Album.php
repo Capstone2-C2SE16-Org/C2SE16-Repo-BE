@@ -5,18 +5,26 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class ClassroomManager extends Model
+class Album extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'image',
+        'date_upload', 
+        'classroom_id', 
+    ];
 
     public function classroom(): BelongsTo
     {
         return $this->belongsTo(Classroom::class);
     }
 
-    public function manager(): BelongsTo
+    public function images(): HasMany
     {
-        return $this->belongsTo(Manager::class);
+        return $this->hasMany(Image::class);
     }
 }

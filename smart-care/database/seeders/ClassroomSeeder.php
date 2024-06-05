@@ -3,7 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Classroom;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\ClassroomType;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class ClassroomSeeder extends Seeder
@@ -13,10 +14,17 @@ class ClassroomSeeder extends Seeder
      */
     public function run(): void
     {
-        Classroom::create([
-            'classroom_type_id' => 1,
-            'learning_schedule_id' => '1',
-            'name' => 'lịch học lớp lớn 1',
-        ]);
+        $classroomTypes = ClassroomType::all();
+
+        foreach ($classroomTypes as $type) {
+            for ($i = 1; $i <= 3; $i++) {
+                Classroom::create([
+                    'name' => "{$type->name} {$i}",
+                    'classroom_type_id' => $type->id,
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ]);
+            }
+        }
     }
 }

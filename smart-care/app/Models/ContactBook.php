@@ -9,7 +9,24 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ContactBook extends Model
 {
-    use HasFactory;
+    use HasFactory;    
+
+    protected $fillable = [
+        'height', 
+        'weight', 
+        'blood_group',
+        'blood_pressure', 
+        'vision_test', 
+        'allergies',
+        'total_absences',
+        'good_behavior_certificates',
+        'comment', 
+        'student_id' 
+    ];
+
+    protected $casts = [
+        'good_behavior_certificates' => 'array' 
+    ];
 
     public function student(): BelongsTo
     {

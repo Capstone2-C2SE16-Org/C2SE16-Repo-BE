@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\ClassroomType;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class ClassroomTypeSeeder extends Seeder
@@ -13,20 +13,22 @@ class ClassroomTypeSeeder extends Seeder
      */
     public function run(): void
     {
-        ClassroomType::create([
-            'name' => 'Lớp lớn 1',
-        ]);
-        
-        ClassroomType::create([
-            'name' => 'Lớp lớn 2',
-        ]);
-
-        ClassroomType::create([
-            'name' => 'Lớp bé 1',
-        ]);
-
-        ClassroomType::create([
-            'name' => 'Lớp bé 2',
+        ClassroomType::insert([
+            [
+                'name' => 'Lớp bé',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'name' => 'Lớp nhỡ',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'name' => 'Lớp lớn',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
         ]);
 
     }

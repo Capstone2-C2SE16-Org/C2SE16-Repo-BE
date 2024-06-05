@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\ClassroomManager;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Classroom;
+use App\Models\Manager;
 use Illuminate\Database\Seeder;
 
 class ClassroomManagerSeeder extends Seeder
@@ -13,25 +13,20 @@ class ClassroomManagerSeeder extends Seeder
      */
     public function run(): void
     {
-        
+        $teachers = Manager::role('teacher')->get(); 
+        $classrooms = Classroom::all();
 
-        ClassroomManager::create([
-            'manager_id' => '1',
-            'classroom_id' => '1',
-        ]);
+        foreach ($classrooms as $classroom) {
+            $classroom->managers()->detach(); 
+        }
 
-        // ClassroomManager::create([
-        //     'manager_id' => '2',
-        //     'classroom_id' => '2',
-        // ]);
+        foreach ($teachers as $teacher) {
+            $numberOfClassroomsToAssign = rand(1, 2);
 
-        // ClassroomManager::create([
-        //     'manager_id' => '3',
-        //     'classroom_id' => '3',
-        // ]);
-        // ClassroomManager::create([
-        //     'manager_id' => '4',
-        //     'classroom_id' => '4',
-        // ]);
+            $assignedClassrooms = $classrooms->random($numberOfClassroomsToAssign);
+            foreach ($assignedClassrooms as $classroom) {
+                $classroom->managers()->attach($teacher); 
+            }
+        }
     }
 }

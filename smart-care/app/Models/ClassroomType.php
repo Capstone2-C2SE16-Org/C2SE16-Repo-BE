@@ -10,6 +10,10 @@ class ClassroomType extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+    ];
+
     public function classrooms(): HasMany
     {
         return $this->HasMany(Classroom::class);

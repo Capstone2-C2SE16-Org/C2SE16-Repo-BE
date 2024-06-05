@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\StudentController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,3 +20,5 @@ Route::get('/', function () {
 
 Route::get('/reset-password', [AuthController::class, 'resetPasswordLoad']);
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
+
+// Route::resource('students', StudentController::class);

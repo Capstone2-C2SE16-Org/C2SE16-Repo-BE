@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -23,14 +24,17 @@ class Manager extends Authenticatable
     protected $fillable = [
         'name',
         'address',
-        'day_of_birth',
+        'date_of_birth',
         'email',
         'gender',
         'profile_image',
         'phone_number',
         'username',
         'password',
-        'is_enable'
+        'is_enable',
+        'ward_id',
+        'district_id',
+        'province_id'
     ];
 
     /**
@@ -72,13 +76,43 @@ class Manager extends Authenticatable
         return $this->hasMany(ContactBookManager::class);
     }
 
-    public function classroom_managers(): HasMany
+    public function classrooms(): BelongsToMany
     {
-        return $this->hasMany(ClassroomManager::class);
+        return $this->belongsToMany(Classroom::class, 'classroom_managers', 'manager_id', 'classroom_id');
     }
 
     public function announcements(): HasMany
     {
         return $this->hasMany(Announcement::class);
+    }
+
+    public function ward(): BelongsTo
+    {
+        return $this->belongsTo(Ward::class);
+    }
+
+    public function district(): BelongsTo
+    {
+        return $this->belongsTo(District::class);
+    }
+
+    public function province(): BelongsTo
+    {
+        return $this->belongsTo(Province::class);
+    }
+
+    public function isStudent()
+    {
+        return $this->roles->pluck('name')->contains('student');
+    }
+
+    public function isTeacher()
+    {
+        return $this->roles->pluck('name')->contains('teacher');
+    }
+
+    public function getFullAddressAttribute()
+    {
+        return $this->address . ', ' . $this->ward->name . ', ' . $this->district->name . ', ' . $this->province->name;
     }
 }   
